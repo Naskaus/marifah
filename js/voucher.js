@@ -120,6 +120,8 @@ const VoucherPage = {
     const badge = document.getElementById('voucherBadge');
     badge.textContent = 'Actif';
     badge.classList.remove('hidden', 'voucher-card__badge--used');
+
+    this.initPinInputs();
   },
 
   showUsedState() {
@@ -206,6 +208,91 @@ const VoucherPage = {
       errorEl.classList.add('visible');
       btn.disabled = false;
       btn.textContent = 'Activer mon bon';
+    }
+  },
+
+  initPinInputs() {
+    const digits = document.querySelectorAll('.voucher-redeem__pin-digit');
+    const redeemBtn = document.getElementById('redeemBtn');
+    if (!digits.length) return;
+
+    const updateBtn = () => {
+      const filled = Array.from(digits).every(d => d.value.length === 1);
+      redeemBtn.disabled = !filled;
+    };
+
+    digits.forEach((input, i) => {
+      input.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/\D/g, '');
+        e.target.value = val.slice(0, 1);
+        if (val && i < digits.length - 1) {
+          digits[i + 1].focus();
+        }
+        updateBtn();
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && i > 0) {
+          digits[i - 1].focus();
+          digits[i - 1].value = '';
+          updateBtn();
+        }
+      });
+
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasted = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 4);
+        for (let j = 0; j < pasted.length && j < digits.length; j++) {
+          digits[j].value = pasted[j];
+        }
+        if (pasted.length > 0) {
+          digits[Math.min(pasted.length, digits.length) - 1].focus();
+        }
+        updateBtn();
+      });
+    });
+  },
+
+  async redeem() {
+    const digits = document.querySelectorAll('.voucher-redeem__pin-digit');
+    const pin = Array.from(digits).map(d => d.value).join('');
+    const errorEl = document.getElementById('redeemError');
+    const btn = document.getElementById('redeemBtn');
+    const phone = this.getPhone();
+
+    if (pin.length !== 4) return;
+
+    errorEl.classList.remove('visible');
+    btn.disabled = true;
+    btn.textContent = 'Validation...';
+
+    try {
+      const res = await fetch(`/api/vouchers/${encodeURIComponent(this.code)}/redeem`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, pin })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorEl.textContent = data.error || 'Erreur de validation.';
+        errorEl.classList.add('visible');
+        // Clear PIN inputs
+        digits.forEach(d => { d.value = ''; });
+        digits[0].focus();
+        btn.disabled = true;
+        btn.textContent = 'Utiliser ce bon';
+        return;
+      }
+
+      // Success → transition to used state
+      this.showUsedState();
+    } catch (err) {
+      errorEl.textContent = 'Erreur de connexion. Reessayez.';
+      errorEl.classList.add('visible');
+      btn.disabled = false;
+      btn.textContent = 'Utiliser ce bon';
     }
   },
 

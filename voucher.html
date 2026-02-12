@@ -46,6 +46,21 @@
         <div class="voucher-active-msg__icon">&#9989;</div>
         <div class="voucher-active-msg__title">Bon actif</div>
         <div class="voucher-active-msg__text">Montrez ce bon au serveur lors de votre visite chez Marifah.</div>
+
+        <!-- Staff PIN redemption -->
+        <div class="voucher-redeem">
+          <div class="voucher-redeem__divider">
+            <span>Espace serveur</span>
+          </div>
+          <div class="voucher-redeem__pin">
+            <input type="tel" class="voucher-redeem__pin-digit" maxlength="1" inputmode="numeric" data-index="0" autocomplete="off">
+            <input type="tel" class="voucher-redeem__pin-digit" maxlength="1" inputmode="numeric" data-index="1" autocomplete="off">
+            <input type="tel" class="voucher-redeem__pin-digit" maxlength="1" inputmode="numeric" data-index="2" autocomplete="off">
+            <input type="tel" class="voucher-redeem__pin-digit" maxlength="1" inputmode="numeric" data-index="3" autocomplete="off">
+          </div>
+          <button class="voucher-redeem__btn" id="redeemBtn" disabled onclick="VoucherPage.redeem()">Utiliser ce bon</button>
+          <div class="voucher-redeem__error" id="redeemError"></div>
+        </div>
       </div>
 
       <!-- Used voucher message -->

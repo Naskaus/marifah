@@ -6,6 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const config = require('../config');
 
 // GET /api/vouchers/validate/:code - Legacy validation endpoint
 router.get('/validate/:code', (req, res) => {
@@ -74,6 +75,45 @@ router.get('/:code', (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: 'Erreur chargement voucher' });
+  }
+});
+
+// POST /api/vouchers/:code/redeem - Redeem a voucher with staff PIN
+router.post('/:code/redeem', (req, res) => {
+  try {
+    const { phone, pin } = req.body;
+
+    if (!pin || pin !== config.VOUCHER_PIN) {
+      return res.status(403).json({ error: 'Code PIN incorrect' });
+    }
+
+    if (!phone) {
+      return res.status(400).json({ error: 'Numero de telephone requis' });
+    }
+
+    const voucher = db.vouchers.getByCode(req.params.code);
+    if (!voucher) {
+      return res.status(404).json({ error: 'Voucher introuvable' });
+    }
+
+    const claim = db.voucherClaims.getClaimForCustomerVoucher(voucher.id, phone);
+    if (!claim) {
+      return res.status(404).json({ error: 'Aucun bon actif trouve pour ce numero' });
+    }
+
+    if (claim.used_at) {
+      return res.status(410).json({ error: 'Ce bon a deja ete utilise' });
+    }
+
+    const success = db.voucherClaims.markUsed(claim.id);
+    if (!success) {
+      return res.status(500).json({ error: 'Erreur lors de la validation' });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Redeem error:', error);
+    res.status(500).json({ error: 'Erreur lors de la validation' });
   }
 });
 

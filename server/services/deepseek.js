@@ -4,6 +4,40 @@
  */
 
 const config = require('../config');
+const fs = require('fs');
+const path = require('path');
+
+// Load menu.json at startup
+let menuData = null;
+try {
+  const menuPath = path.join(__dirname, '..', '..', 'data', 'menu.json');
+  menuData = JSON.parse(fs.readFileSync(menuPath, 'utf-8'));
+  console.log('Menu loaded for chatbot:', menuData.categories.length, 'categories');
+} catch (e) {
+  console.error('Failed to load menu.json for chatbot:', e.message);
+}
+
+/**
+ * Build the full menu section from menu.json
+ */
+function buildMenuPromptSection() {
+  if (!menuData || !menuData.categories) {
+    return '## MENU\nMenu non disponible. Invitez le client à consulter la carte sur place.';
+  }
+
+  let section = '## MENU COMPLET (Prix en CHF)\n';
+  for (const cat of menuData.categories) {
+    const catName = cat.name.fr || cat.name.en;
+    section += `\n### ${cat.icon} ${catName}\n`;
+    for (const item of cat.items) {
+      const desc = item.description.fr;
+      const tags = item.tags && item.tags.length > 0 ? ` [${item.tags.join(', ')}]` : '';
+      const half = item.halfPrice ? ` (1/2: ${item.halfPrice}.-)` : '';
+      section += `- ${item.name}: ${item.price}.-${half} — ${desc}${tags}\n`;
+    }
+  }
+  return section;
+}
 
 // System prompt for the restaurant assistant
 const SYSTEM_PROMPT = `Tu es l'assistant virtuel du Restaurant Marifah, un restaurant thaïlandais authentique situé à Meyrin, Genève.
@@ -35,30 +69,23 @@ Tu aides les clients à:
 ## PAIEMENTS ACCEPTÉS
 Visa, Mastercard, Maestro, American Express, Postcard, Espèces, Tickets restaurant, Lunch Checks
 
-## MENU (Prix en CHF)
-### Entrées (15-30.-)
-- Popia Thod (rouleaux de printemps): 15.-
-- Satay (brochettes): 18.-
-- Tom Yum (soupe épicée): 17.-
-- Som Tam (salade de papaye): 15.-
-- Ruam Mit (assortiment): 30.-
+${buildMenuPromptSection()}
 
-### Plats Principaux (23-38.-)
-- Pad Thai: 23.-
-- Curry vert/rouge/jaune: 25.-
-- Poulet aux noix de cajou: 25.-
-- Canard croustillant: 32.-
-- Boeuf au basilic: 34.-
-- Crevettes sautées: 38.-
+## GUIDE ALLERGIES ET PREFERENCES
+Tu peux conseiller avec confiance sur:
+- **Plats végétariens**: les plats marqués [vegetarian] dans le menu
+- **Plats épicés**: les plats marqués [spicy] — tu peux aussi suggérer de demander "pas épicé" en commandant
+- **Plats populaires**: les plats marqués [popular] sont les favoris des clients
+- **Budget**: tu connais tous les prix, aide à trouver des options dans le budget du client
 
-### Végétarien (15-25.-)
-- Phad Prak Tofu: 25.-
-- Légumes au curry: 23.-
-- Riz sauté aux légumes: 20.-
+Pour les **allergènes spécifiques** (gluten, noix, arachides, produits laitiers, crustacés, soja, sésame, etc.):
+Réponds: "Pour des informations précises sur les allergènes, je vous recommande de nous contacter directement par téléphone au 022 782 55 69 ou WhatsApp au +41 78 849 93 45. Notre équipe pourra vous renseigner sur chaque plat."
 
-### Desserts (7-12.-)
-- Riz gluant à la mangue: 12.-
-- Glaces maison: 7.-
+## ESCALATION
+Si la conversation devient trop complexe, hors de ton domaine, ou si le client a besoin d'aide personnalisée que tu ne peux pas fournir:
+- Suggère de contacter le restaurant par WhatsApp: +41 78 849 93 45
+- Ou par téléphone: 022 782 55 69
+- Exemple: "Pour cette demande particulière, je vous invite à nous contacter directement par WhatsApp (+41 78 849 93 45) ou téléphone (022 782 55 69). Notre équipe se fera un plaisir de vous aider!"
 
 ## POUR LES RÉSERVATIONS
 Quand un client veut réserver, tu dois collecter ces informations:
@@ -78,8 +105,7 @@ Une fois toutes les infos collectées, génère un JSON de réservation dans ce 
 2. Réponds en français par défaut, en anglais si le client parle anglais
 3. Sois concis mais informatif
 4. Si le client demande quelque chose hors de ton domaine, ramène poliment vers le restaurant
-5. Pour les allergies: recommande de demander au serveur lors de la visite
-6. Utilise des emojis avec modération (🍜 🌶️ 🌱 ✅)
+5. Utilise des emojis avec modération (🍜 🌶️ 🌱 ✅)
 
 ## EXEMPLES DE RÉPONSES
 
@@ -125,7 +151,7 @@ async function chat(sessionId, userMessage) {
           ...recentHistory
         ],
         temperature: 0.7,
-        max_tokens: 500
+        max_tokens: 700
       })
     });
 

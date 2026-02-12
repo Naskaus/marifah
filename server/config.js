@@ -10,6 +10,9 @@ module.exports = {
   // Admin
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'marifah2024',
 
+  // Voucher redemption PIN (staff enters this to mark voucher as used)
+  VOUCHER_PIN: process.env.VOUCHER_PIN || '1217',
+
   // Database
   DATABASE_PATH: process.env.DATABASE_PATH || '',
 
