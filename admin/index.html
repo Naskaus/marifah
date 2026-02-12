@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Restaurant Marifah</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+  <!-- LOGIN VIEW -->
+  <div id="loginView" class="login-page">
+    <div class="login-card">
+      <div class="login-card__logo">Marifah</div>
+      <div class="login-card__subtitle">Panneau d'administration</div>
+      <div id="loginError" class="login-card__error"></div>
+      <form id="loginForm">
+        <div class="form-group">
+          <input type="password" id="loginPassword" class="form-control" placeholder="Mot de passe" required autofocus>
+        </div>
+        <button type="submit" class="btn btn--primary" style="width:100%">Connexion</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboardView" style="display:none">
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <nav class="admin-sidebar">
+        <div class="admin-sidebar__brand">
+          <h2>Marifah</h2>
+          <span>Administration</span>
+        </div>
+        <ul class="admin-sidebar__nav">
+          <li><a href="/admin/index.html" class="admin-sidebar__link active" data-page="dashboard"><span class="icon">&#9776;</span> Dashboard</a></li>
+          <li><a href="/admin/menu.html" class="admin-sidebar__link" data-page="menu"><span class="icon">&#127860;</span> Menu</a></li>
+          <li><a href="/admin/reservations.html" class="admin-sidebar__link" data-page="reservations"><span class="icon">&#128197;</span> Reservations</a></li>
+          <li><a href="/admin/vouchers.html" class="admin-sidebar__link" data-page="vouchers"><span class="icon">&#127915;</span> Vouchers</a></li>
+        </ul>
+        <div class="admin-sidebar__footer">
+          <a href="/" target="_blank">Voir le site</a> &middot;
+          <a href="#" id="logoutBtn">Deconnexion</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="admin-main">
+        <div class="admin-header">
+          <h1 class="admin-header__title">Dashboard</h1>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card__label">Reservations aujourd'hui</div>
+            <div class="stat-card__value stat-card__value--green" id="statToday">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__label">En attente</div>
+            <div class="stat-card__value" id="statPending">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__label">Total reservations</div>
+            <div class="stat-card__value" id="statTotal">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__label">Vouchers actifs</div>
+            <div class="stat-card__value stat-card__value--green" id="statVouchers">-</div>
+          </div>
+        </div>
+
+        <!-- Recent reservations -->
+        <div class="table-container">
+          <div class="table-toolbar">
+            <h3>Reservations recentes</h3>
+            <a href="/admin/reservations.html" class="btn btn--secondary btn--sm">Voir tout</a>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Heure</th>
+                <th>Pers.</th>
+                <th>Source</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody id="recentReservations">
+              <tr><td colspan="6" class="table-empty">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+  <script>
+    // Check auth state
+    const token = Admin.getToken();
+    if (token) {
+      showDashboard();
+    }
+
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = document.getElementById('loginPassword').value;
+      const errorEl = document.getElementById('loginError');
+
+      try {
+        const ok = await Admin.login(password);
+        if (ok) {
+          showDashboard();
+        } else {
+          errorEl.textContent = 'Mot de passe incorrect';
+          errorEl.classList.add('visible');
+        }
+      } catch (err) {
+        errorEl.textContent = 'Mot de passe incorrect';
+        errorEl.classList.add('visible');
+      }
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      Admin.logout();
+    });
+
+    async function showDashboard() {
+      document.getElementById('loginView').style.display = 'none';
+      document.getElementById('dashboardView').style.display = 'block';
+      await loadStats();
+    }
+
+    async function loadStats() {
+      try {
+        // Load recent reservations
+        const resData = await Admin.apiGet('/api/admin/reservations?limit=5');
+        if (resData) {
+          document.getElementById('statTotal').textContent = resData.total;
+
+          // Count today's and pending
+          const today = new Date().toISOString().split('T')[0];
+          const todayCount = resData.items.filter(r => r.date === today).length;
+          const pendingCount = resData.items.filter(r => r.status === 'pending').length;
+          document.getElementById('statToday').textContent = todayCount;
+          document.getElementById('statPending').textContent = pendingCount;
+
+          // Render table
+          const tbody = document.getElementById('recentReservations');
+          if (resData.items.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="table-empty">Aucune reservation</td></tr>';
+          } else {
+            tbody.innerHTML = resData.items.map(r => `
+              <tr>
+                <td>${Admin.escapeHtml(r.name)}</td>
+                <td>${Admin.formatDate(r.date)}</td>
+                <td>${Admin.escapeHtml(r.time)}</td>
+                <td>${r.guests}</td>
+                <td><span class="badge badge--${r.source}">${r.source}</span></td>
+                <td><span class="badge badge--${r.status}">${r.status}</span></td>
+              </tr>
+            `).join('');
+          }
+        }
+
+        // Load voucher count
+        const vouchers = await Admin.apiGet('/api/admin/vouchers');
+        if (vouchers) {
+          const activeCount = vouchers.filter(v => v.is_active).length;
+          document.getElementById('statVouchers').textContent = activeCount;
+        }
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
+    }
+  </script>
+</body>
+</html>

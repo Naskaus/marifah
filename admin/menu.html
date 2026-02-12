@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu - Admin Marifah</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <nav class="admin-sidebar">
+      <div class="admin-sidebar__brand">
+        <h2>Marifah</h2>
+        <span>Administration</span>
+      </div>
+      <ul class="admin-sidebar__nav">
+        <li><a href="/admin/index.html" class="admin-sidebar__link" data-page="dashboard"><span class="icon">&#9776;</span> Dashboard</a></li>
+        <li><a href="/admin/menu.html" class="admin-sidebar__link active" data-page="menu"><span class="icon">&#127860;</span> Menu</a></li>
+        <li><a href="/admin/reservations.html" class="admin-sidebar__link" data-page="reservations"><span class="icon">&#128197;</span> Reservations</a></li>
+        <li><a href="/admin/vouchers.html" class="admin-sidebar__link" data-page="vouchers"><span class="icon">&#127915;</span> Vouchers</a></li>
+      </ul>
+      <div class="admin-sidebar__footer">
+        <a href="/" target="_blank">Voir le site</a> &middot;
+        <a href="#" onclick="Admin.logout();return false">Deconnexion</a>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="admin-main">
+      <div class="admin-header">
+        <h1 class="admin-header__title">Editeur de Menu</h1>
+        <div class="admin-header__actions">
+          <button class="btn btn--secondary" onclick="MenuAdmin.addCategory()">+ Categorie</button>
+          <button class="btn btn--primary" onclick="MenuAdmin.addItem()">+ Item</button>
+        </div>
+      </div>
+
+      <div id="menuContent">
+        <div class="table-empty">Chargement...</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Item Modal -->
+  <div id="itemModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 id="itemModalTitle">Ajouter un item</h3>
+        <button class="modal__close" onclick="Admin.closeModal('itemModal')">&times;</button>
+      </div>
+      <div class="modal__body">
+        <input type="hidden" id="itemId">
+        <div class="form-group">
+          <label>Categorie</label>
+          <select id="itemCategory" class="form-control"></select>
+        </div>
+        <div class="form-group">
+          <label>Nom du plat</label>
+          <input type="text" id="itemName" class="form-control" placeholder="ex: Pad Thai">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Description (FR)</label>
+            <input type="text" id="itemDescFr" class="form-control" placeholder="Description en francais">
+          </div>
+          <div class="form-group">
+            <label>Description (EN)</label>
+            <input type="text" id="itemDescEn" class="form-control" placeholder="English description">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prix (CHF)</label>
+            <input type="number" id="itemPrice" class="form-control" min="0" step="0.5">
+          </div>
+          <div class="form-group">
+            <label>Demi-portion (CHF)</label>
+            <input type="number" id="itemHalfPrice" class="form-control" min="0" step="0.5" placeholder="Optionnel">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tags</label>
+          <div style="display:flex;gap:12px;margin-top:4px">
+            <label style="font-weight:normal;font-size:14px"><input type="checkbox" id="tagSpicy" value="spicy"> Piquant</label>
+            <label style="font-weight:normal;font-size:14px"><input type="checkbox" id="tagVegetarian" value="vegetarian"> Vegetarien</label>
+            <label style="font-weight:normal;font-size:14px"><input type="checkbox" id="tagPopular" value="popular"> Populaire</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--secondary" onclick="Admin.closeModal('itemModal')">Annuler</button>
+        <button class="btn btn--primary" onclick="MenuAdmin.saveItem()">Sauvegarder</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Modal -->
+  <div id="categoryModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 id="categoryModalTitle">Ajouter une categorie</h3>
+        <button class="modal__close" onclick="Admin.closeModal('categoryModal')">&times;</button>
+      </div>
+      <div class="modal__body">
+        <input type="hidden" id="categoryEditId">
+        <div class="form-group">
+          <label>ID (slug unique)</label>
+          <input type="text" id="categoryId" class="form-control" placeholder="ex: desserts">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom (FR)</label>
+            <input type="text" id="categoryNameFr" class="form-control" placeholder="ex: Desserts">
+          </div>
+          <div class="form-group">
+            <label>Nom (EN)</label>
+            <input type="text" id="categoryNameEn" class="form-control" placeholder="ex: Desserts">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Icone (emoji)</label>
+          <input type="text" id="categoryIcon" class="form-control" placeholder="ex: &#127856;" maxlength="4">
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--secondary" onclick="Admin.closeModal('categoryModal')">Annuler</button>
+        <button class="btn btn--primary" onclick="MenuAdmin.saveCategory()">Sauvegarder</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+  <script src="/js/admin-menu.js"></script>
+</body>
+</html>

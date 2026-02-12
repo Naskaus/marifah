@@ -1,12 +1,22 @@
 /**
  * MARIFAH - Email Notification Service
- * Sends reservation notifications via email
+ * Sends reservation notifications via email using nodemailer
  */
 
+const nodemailer = require('nodemailer');
 const config = require('../config');
 
-// We'll use a simple approach without nodemailer for now
-// Just format the email data - can be sent via external service or SMTP later
+let transporter = null;
+
+/**
+ * Get or create the nodemailer transporter
+ */
+function getTransporter() {
+  if (!transporter) {
+    transporter = nodemailer.createTransport(config.EMAIL.smtp);
+  }
+  return transporter;
+}
 
 /**
  * Format reservation for email
@@ -22,44 +32,44 @@ function formatReservationEmail(reservation, source = 'formulaire') {
     year: 'numeric'
   });
 
-  const subject = `🍜 Nouvelle Réservation - ${name} - ${formattedDate}`;
+  const subject = `Nouvelle Reservation - ${name} - ${formattedDate}`;
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="background: #22c55e; color: white; padding: 20px; text-align: center;">
-        <h1 style="margin: 0;">🍜 Restaurant Marifah</h1>
-        <p style="margin: 5px 0 0 0;">Nouvelle Réservation</p>
+        <h1 style="margin: 0;">Restaurant Marifah</h1>
+        <p style="margin: 5px 0 0 0;">Nouvelle Reservation</p>
       </div>
 
       <div style="padding: 20px; background: #f9fafb;">
-        <p style="color: #6b7280; margin-bottom: 20px;">Reçue via ${source}</p>
+        <p style="color: #6b7280; margin-bottom: 20px;">Recue via ${source}</p>
 
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>👤 Nom</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>Nom</strong></td>
             <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${name}</td>
           </tr>
           <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>📅 Date</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>Date</strong></td>
             <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${formattedDate}</td>
           </tr>
           <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>🕐 Heure</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>Heure</strong></td>
             <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${time}</td>
           </tr>
           <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>👥 Personnes</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>Personnes</strong></td>
             <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${guests}</td>
           </tr>
           <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>📞 Téléphone</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>Telephone</strong></td>
             <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">
               <a href="tel:${phone}">${phone}</a>
             </td>
           </tr>
           ${email ? `
           <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>📧 Email</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>Email</strong></td>
             <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">
               <a href="mailto:${email}">${email}</a>
             </td>
@@ -67,14 +77,14 @@ function formatReservationEmail(reservation, source = 'formulaire') {
           ` : ''}
           ${message ? `
           <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>💬 Message</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><strong>Message</strong></td>
             <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${message}</td>
           </tr>
           ` : ''}
         </table>
 
         <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px;">
-          <p style="margin: 0 0 10px 0;"><strong>Répondre au client:</strong></p>
+          <p style="margin: 0 0 10px 0;"><strong>Repondre au client:</strong></p>
           <a href="https://wa.me/41${phone.replace(/^0|\+41|[^0-9]/g, '')}"
              style="display: inline-block; padding: 10px 20px; background: #25D366; color: white; text-decoration: none; border-radius: 5px; margin-right: 10px;">
             WhatsApp
@@ -93,7 +103,7 @@ function formatReservationEmail(reservation, source = 'formulaire') {
   `;
 
   const text = `
-NOUVELLE RÉSERVATION - Restaurant Marifah
+NOUVELLE RESERVATION - Restaurant Marifah
 ==========================================
 Source: ${source}
 
@@ -101,19 +111,19 @@ Nom: ${name}
 Date: ${formattedDate}
 Heure: ${time}
 Personnes: ${guests}
-Téléphone: ${phone}
+Telephone: ${phone}
 ${email ? `Email: ${email}` : ''}
 ${message ? `Message: ${message}` : ''}
 
 ------------------------------------------
-Répondre: https://wa.me/41${phone.replace(/^0|\+41|[^0-9]/g, '')}
+Repondre: https://wa.me/41${phone.replace(/^0|\+41|[^0-9]/g, '')}
 `;
 
   return { subject, html, text };
 }
 
 /**
- * Send email notification (placeholder - implement with nodemailer or external service)
+ * Send email notification via SMTP
  */
 async function sendReservationEmail(reservation, source = 'formulaire') {
   if (!config.EMAIL?.enabled) {
@@ -121,24 +131,29 @@ async function sendReservationEmail(reservation, source = 'formulaire') {
     return { ok: false, error: 'Email disabled' };
   }
 
+  const { user, pass } = config.EMAIL.smtp.auth || {};
+  if (!user || !pass) {
+    console.log('Email SMTP credentials not configured, skipping email');
+    return { ok: false, error: 'SMTP credentials not configured' };
+  }
+
   const emailData = formatReservationEmail(reservation, source);
 
-  // For now, just log the email data
-  // In production, use nodemailer or an email API service
-  console.log('📧 Email notification prepared:', emailData.subject);
-
-  // TODO: Implement actual email sending with nodemailer
-  // const nodemailer = require('nodemailer');
-  // const transporter = nodemailer.createTransport(config.EMAIL.smtp);
-  // await transporter.sendMail({
-  //   from: config.EMAIL.smtp.auth.user,
-  //   to: config.EMAIL.to,
-  //   subject: emailData.subject,
-  //   text: emailData.text,
-  //   html: emailData.html
-  // });
-
-  return { ok: true, message: 'Email prepared (implement SMTP for actual sending)' };
+  try {
+    const transport = getTransporter();
+    await transport.sendMail({
+      from: `"Restaurant Marifah" <${user}>`,
+      to: config.EMAIL.to,
+      subject: emailData.subject,
+      text: emailData.text,
+      html: emailData.html
+    });
+    console.log('Email notification sent:', emailData.subject);
+    return { ok: true };
+  } catch (error) {
+    console.error('Email send error:', error.message);
+    return { ok: false, error: error.message };
+  }
 }
 
 module.exports = {

@@ -7,6 +7,12 @@ module.exports = {
   // Server
   PORT: process.env.PORT || 4000,
 
+  // Admin
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'marifah2024',
+
+  // Database
+  DATABASE_PATH: process.env.DATABASE_PATH || '',
+
   // DeepSeek API
   DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY || 'sk-bbe127a2eafa46aab1103c9001f29dda',
   DEEPSEEK_MODEL: 'deepseek-chat', // V3.2 - cheapest for chat

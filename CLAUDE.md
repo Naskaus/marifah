@@ -4,151 +4,104 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Restaurant Marifah** - Thai restaurant website with AI chatbot, located in Meyrin (Geneva), Switzerland.
-
-- **Website**: Modern, minimalist design with green tones (inspired by Thai cuisine)
-- **Bilingual**: French/English with i18n system
-- **Features**: AI chatbot (DeepSeek), reservation system, Telegram notifications
-
-## Tech Stack
-
-### Frontend
-- Pure HTML5 / CSS3 / Vanilla JS (no framework - optimized for Raspberry Pi)
-- CSS Custom Properties for theming
-- Mobile-first responsive design
-- GSAP-style animations (CSS only)
-
-### Backend
-- Node.js + Express
-- DeepSeek API (deepseek-chat model) for AI chatbot
-- Telegram Bot API for notifications
-- SQLite ready (for future database needs)
-
-## Project Structure
-
-```
-marifah/
-├── index.html              # Homepage
-├── menu.html               # Menu page with filters
-├── reservation.html        # Reservation form + chatbot
-├── contact.html            # Contact info + map
-├── css/
-│   ├── variables.css       # Design tokens, colors, fonts
-│   ├── main.css            # Main styles
-│   ├── animations.css      # Scroll reveal, transitions
-│   └── responsive.css      # Mobile breakpoints
-├── js/
-│   ├── main.js             # Header, mobile menu, scroll
-│   ├── i18n.js             # FR/EN translations
-│   ├── animations.js       # Parallax, typewriter effects
-│   ├── menu.js             # Dynamic menu from JSON
-│   └── chatbot.js          # Chat UI + API calls
-├── data/
-│   └── menu.json           # All 64 menu items (bilingual)
-├── assets/
-│   ├── images/             # Food photos
-│   └── icons/              # Favicon, icons
-├── server/
-│   ├── index.js            # Express server
-│   ├── config.js           # API keys, settings
-│   ├── routes/
-│   │   ├── chat.js         # POST /api/chat
-│   │   └── reservation.js  # POST /api/reservation
-│   └── services/
-│       ├── deepseek.js     # AI chat with system prompt
-│       ├── telegram.js     # Telegram notifications
-│       └── email.js        # Email notifications (optional)
-└── package.json
-```
+**Restaurant Marifah** - Thai restaurant website with AI chatbot, located in Meyrin (Geneva), Switzerland. Bilingual (French/English). No build step - pure HTML/CSS/JS frontend served by Express.
 
 ## Commands
 
 ```bash
-# Install dependencies
-npm install
-
-# Start server (development)
-npm start
-
-# Server runs on http://localhost:4000
+npm install          # Install dependencies (express, cors, nodemailer, better-sqlite3, qrcode)
+npm start            # Start Express server on http://localhost:4000
 ```
 
-## API Endpoints
+There are no tests, linting, or build steps configured.
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/chat` | Send message to AI chatbot |
-| POST | `/api/reservation` | Create reservation (sends to Telegram) |
-| GET | `/api/health` | Health check |
+## Architecture
 
-## Configuration
+### Frontend (no framework)
+- 4 public HTML pages: `index.html`, `menu.html`, `reservation.html`, `contact.html`
+- 4 admin HTML pages: `admin/index.html` (login+dashboard), `admin/menu.html`, `admin/reservations.html`, `admin/vouchers.html`
+- CSS in `css/` uses custom properties defined in `variables.css` (design tokens)
+- `css/admin.css` - admin panel styles (sidebar layout, tables, modals, toasts, badges)
+- JS files are standalone scripts loaded per-page, no bundling
 
-Edit `server/config.js`:
+### Backend (Express on port 4000)
+- `server/index.js` serves static files from project root and provides API routes
+- All non-API, non-admin routes fall back to `index.html` (SPA-style catch-all)
+- Config in `server/config.js` - all secrets support env var overrides (DEEPSEEK_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, SMTP_USER, SMTP_PASS, ADMIN_PASSWORD, DATABASE_PATH)
 
-```js
-// Already configured:
-DEEPSEEK_API_KEY: 'sk-xxx...',
-TELEGRAM_BOT_TOKEN: '828531...',
-TELEGRAM_CHAT_ID: '410275983',
+### Database (SQLite via better-sqlite3)
+- `server/db.js` - initializes SQLite, creates tables, exposes `reservations` and `vouchers` helpers
+- Database file: `data/marifah.db` (auto-created on first run, gitignored)
+- Two tables: `reservations` (id, name, email, phone, date, time, guests, message, source, status, telegram_sent, email_sent, timestamps) and `vouchers` (id, code, discount_type, discount_value, expiry_date, max_uses, current_uses, is_active, created_at)
 
-// Optional - Email (requires SMTP):
-EMAIL: {
-  enabled: false,
-  smtp: { ... }
-}
-```
+### Admin System
+- Auth: simple password (`ADMIN_PASSWORD` in config, default `marifah2024`). Login returns password as token. Frontend stores in `sessionStorage`. All admin API calls include `x-admin-token` header.
+- `server/middleware/auth.js` - checks `x-admin-token` header
+- `js/admin.js` - shared utilities (auth, fetch wrapper, modals, toasts, helpers)
+- `js/admin-menu.js`, `js/admin-reservations.js`, `js/admin-vouchers.js` - page-specific UI
 
-## Deployment (Raspberry Pi)
+### Key Data Flows
 
-```bash
-# Install PM2 for process management
-npm install -g pm2
+**Chatbot (DeepSeek AI):**
+- `js/chatbot.js` → `POST /api/chat` → `server/services/deepseek.js`
+- Conversation history stored in-memory (`Map` keyed by sessionId, last 10 messages kept)
+- System prompt in `deepseek.js` contains full restaurant info, menu, hours, and reservation instructions
+- When AI response contains a JSON code block with `{"reservation": {...}}`, the chat route auto-extracts it, sends Telegram + email notifications, and stores in SQLite
 
-# Start and persist
-pm2 start server/index.js --name marifah
-pm2 save
-pm2 startup
+**Reservations (two paths):**
+1. **Form**: `reservation.html` form → `POST /api/reservation` → Telegram + Email + SQLite
+2. **Chatbot**: AI conversationally collects name/date/time/guests/phone → emits reservation JSON → same flow
+- Validation: no Sundays (closed), no past dates
+- Email via nodemailer SMTP (requires SMTP_USER + SMTP_PASS env vars)
+- Admin can view/filter/update status at `/admin/reservations.html`
 
-# With Nginx reverse proxy on port 80
-# Configure SSL with Let's Encrypt
-```
+**Voucher System:**
+- Admin creates vouchers at `/admin/vouchers.html` → stored in SQLite
+- QR codes generated server-side via `qrcode` library (`GET /api/admin/vouchers/:id/qr`)
+- Public validation: `GET /api/vouchers/validate/:code`
 
-## Key Features
+**Menu Admin:**
+- Admin edits menu at `/admin/menu.html` → CRUD API reads/writes `data/menu.json` directly
+- Supports add/edit/delete items and categories, category reordering
 
-### AI Chatbot
-- Model: DeepSeek V3.2 (deepseek-chat)
-- System prompt includes: restaurant info, menu, hours, reservation flow
-- Detects reservation intent and extracts: name, date, time, guests, phone
-- Sends completed reservations to Telegram automatically
+**i18n System:**
+- HTML elements use `data-i18n="key.name"` attributes
+- `js/i18n.js` contains all FR/EN translations, exposes `window.i18n` global
+- Language stored in `localStorage('marifah-lang')`, defaults to French
+- Dispatches `languageChanged` CustomEvent on `window` - other scripts (e.g., `menu.js`) listen to re-render
 
-### Reservation System
-- Form submission → Telegram notification with WhatsApp link
-- Chatbot can also collect reservation info conversationally
-- Validates: no Sundays (closed), no past dates
+**Menu (public):**
+- `data/menu.json` contains all 64+ items with bilingual names/descriptions, organized by category
+- `js/menu.js` fetches JSON, renders client-side with category filter, tag filter (spicy/vegetarian/popular), and search
+- Sidebar scroll-spy highlights active category using IntersectionObserver
 
-### i18n System
-- `data-i18n` attributes on HTML elements
-- `js/i18n.js` contains all translations
-- Language persists in localStorage
+### API Endpoints
 
-## Design System
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/chat` | - | Chatbot message |
+| POST | `/api/reservation` | - | New reservation |
+| GET | `/api/vouchers/validate/:code` | - | Validate voucher |
+| GET | `/api/health` | - | Health check |
+| POST | `/api/admin/login` | - | Admin login |
+| GET/PUT | `/api/admin/menu` | Admin | Full menu CRUD |
+| POST/PUT/DELETE | `/api/admin/menu/items[/:id]` | Admin | Item CRUD |
+| POST/PUT/DELETE | `/api/admin/menu/categories[/:id]` | Admin | Category CRUD |
+| PUT | `/api/admin/menu/categories/reorder` | Admin | Reorder categories |
+| GET | `/api/admin/reservations` | Admin | List/filter reservations |
+| PUT | `/api/admin/reservations/:id/status` | Admin | Update status |
+| GET/POST | `/api/admin/vouchers` | Admin | List/create vouchers |
+| PUT/DELETE | `/api/admin/vouchers/:id` | Admin | Update/delete voucher |
+| GET | `/api/admin/vouchers/:id/qr` | Admin | QR code PNG |
 
-### Colors
-```css
---green-500: #22c55e;  /* Primary */
---cream: #fefdf8;      /* Background */
---gray-800: #1f2937;   /* Text */
-```
+### Design System
 
-### Fonts
-- **Plus Jakarta Sans** - Body text (light weights)
-- **Cormorant Garamond** - Headings (elegant serif)
-- **Space Grotesk** - Accents
+Colors: green palette primary (`--green-500: #22c55e`), cream background (`--cream: #fefdf8`), gray text (`--gray-800: #1f2937`)
 
-## TODO / Future
+Fonts: Plus Jakarta Sans (body), Cormorant Garamond (headings), Space Grotesk (accents)
 
-- [ ] Admin interface for menu editing
-- [ ] Voucher/QR code system
-- [ ] SQLite database for reservations history
-- [ ] Email notifications via nodemailer
-- [ ] WhatsApp Business API integration
+Fluid typography via `clamp()` in `css/variables.css`.
+
+## Deployment
+
+Target: Raspberry Pi with PM2 + Nginx reverse proxy. See `PRD.md` for full restaurant details and complete menu.

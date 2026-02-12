@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservations - Admin Marifah</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <nav class="admin-sidebar">
+      <div class="admin-sidebar__brand">
+        <h2>Marifah</h2>
+        <span>Administration</span>
+      </div>
+      <ul class="admin-sidebar__nav">
+        <li><a href="/admin/index.html" class="admin-sidebar__link" data-page="dashboard"><span class="icon">&#9776;</span> Dashboard</a></li>
+        <li><a href="/admin/menu.html" class="admin-sidebar__link" data-page="menu"><span class="icon">&#127860;</span> Menu</a></li>
+        <li><a href="/admin/reservations.html" class="admin-sidebar__link active" data-page="reservations"><span class="icon">&#128197;</span> Reservations</a></li>
+        <li><a href="/admin/vouchers.html" class="admin-sidebar__link" data-page="vouchers"><span class="icon">&#127915;</span> Vouchers</a></li>
+      </ul>
+      <div class="admin-sidebar__footer">
+        <a href="/" target="_blank">Voir le site</a> &middot;
+        <a href="#" onclick="Admin.logout();return false">Deconnexion</a>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="admin-main">
+      <div class="admin-header">
+        <h1 class="admin-header__title">Reservations</h1>
+      </div>
+
+      <div class="table-container">
+        <div class="table-toolbar">
+          <div class="table-filters">
+            <select id="filterStatus" class="form-control" onchange="ResAdmin.load()">
+              <option value="">Tous les statuts</option>
+              <option value="pending">En attente</option>
+              <option value="confirmed">Confirme</option>
+              <option value="cancelled">Annule</option>
+            </select>
+            <select id="filterSource" class="form-control" onchange="ResAdmin.load()">
+              <option value="">Toutes les sources</option>
+              <option value="formulaire">Formulaire</option>
+              <option value="chatbot">Chatbot</option>
+            </select>
+            <input type="date" id="filterDate" class="form-control" onchange="ResAdmin.load()">
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom</th>
+              <th>Date</th>
+              <th>Heure</th>
+              <th>Pers.</th>
+              <th>Telephone</th>
+              <th>Source</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reservationsBody">
+            <tr><td colspan="9" class="table-empty">Chargement...</td></tr>
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <div class="pagination__info" id="paginationInfo"></div>
+          <div class="pagination__buttons" id="paginationButtons"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/admin.js"></script>
+  <script src="/js/admin-reservations.js"></script>
+</body>
+</html>
