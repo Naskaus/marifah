@@ -1,0 +1,338 @@
+/* =============================================
+   MARIFAH - Public Voucher Page
+   Mobile-first voucher card + claim flow
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-primary);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: var(--leading-normal);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+/* =============================================
+   VOUCHER CONTAINER
+   ============================================= */
+.voucher-page {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* =============================================
+   VOUCHER CARD
+   ============================================= */
+.voucher-card {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(135deg, var(--green-600) 0%, var(--green-800) 100%);
+}
+
+.voucher-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.voucher-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.1) 100%);
+}
+
+.voucher-card__content {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  color: var(--white);
+}
+
+.voucher-card__discount {
+  font-family: var(--font-accent);
+  font-size: clamp(2.5rem, 8vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.voucher-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.voucher-card__description {
+  font-size: var(--text-sm);
+  opacity: 0.9;
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-3);
+}
+
+.voucher-card__expiry {
+  font-size: var(--text-xs);
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Active badge overlay */
+.voucher-card__badge {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 2;
+  background: var(--green-500);
+  color: var(--white);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  box-shadow: 0 2px 8px rgba(34,197,94,0.4);
+}
+
+.voucher-card__badge--used {
+  background: var(--gray-500);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* =============================================
+   ACTIVE VOUCHER MESSAGE
+   ============================================= */
+.voucher-active-msg {
+  background: var(--green-50);
+  border: 2px solid var(--green-400);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  text-align: center;
+  margin-top: var(--space-4);
+}
+
+.voucher-active-msg__icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-2);
+}
+
+.voucher-active-msg__title {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  color: var(--green-700);
+  margin-bottom: var(--space-1);
+}
+
+.voucher-active-msg__text {
+  font-size: var(--text-sm);
+  color: var(--green-600);
+}
+
+.voucher-used-msg {
+  background: var(--gray-50);
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  text-align: center;
+  margin-top: var(--space-4);
+}
+
+.voucher-used-msg__title {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  color: var(--gray-600);
+  margin-bottom: var(--space-1);
+}
+
+.voucher-used-msg__text {
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+}
+
+/* =============================================
+   CLAIM FORM
+   ============================================= */
+.voucher-claim {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin-top: var(--space-4);
+  box-shadow: var(--shadow-md);
+}
+
+.voucher-claim__title {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-1);
+}
+
+.voucher-claim__subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.voucher-claim .form-group {
+  margin-bottom: var(--space-3);
+}
+
+.voucher-claim label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  margin-bottom: var(--space-1);
+  color: var(--color-text);
+}
+
+.voucher-claim label .optional {
+  font-weight: var(--font-normal);
+  color: var(--color-text-muted);
+}
+
+.voucher-claim input {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-family: var(--font-primary);
+  color: var(--color-text);
+  transition: border-color var(--transition-fast);
+}
+
+.voucher-claim input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.voucher-claim__btn {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-primary);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  margin-top: var(--space-2);
+}
+
+.voucher-claim__btn:hover {
+  background: var(--color-primary-dark);
+}
+
+.voucher-claim__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.voucher-claim__error {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-3);
+  display: none;
+}
+
+.voucher-claim__error.visible { display: block; }
+
+/* =============================================
+   ERROR STATE
+   ============================================= */
+.voucher-error {
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+}
+
+.voucher-error__icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+}
+
+.voucher-error__title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.voucher-error__text {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* =============================================
+   LOADING
+   ============================================= */
+.voucher-loading {
+  text-align: center;
+  padding: var(--space-16) var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.voucher-loading__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto var(--space-4);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =============================================
+   BRANDING FOOTER
+   ============================================= */
+.voucher-branding {
+  text-align: center;
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.voucher-branding__name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin-bottom: var(--space-1);
+}
+
+.voucher-branding__address {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+}
+
+/* =============================================
+   HIDDEN UTILITY
+   ============================================= */
+.hidden { display: none !important; }

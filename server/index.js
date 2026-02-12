@@ -20,12 +20,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..')));
 
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 // ==========================================
 // PUBLIC ROUTES
 // ==========================================
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/reservation', require('./routes/reservation'));
-app.use('/api/vouchers', require('./routes/vouchers'));
+app.use('/api/vouchers', require('./routes/public-vouchers'));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -79,7 +82,8 @@ app.listen(config.PORT, () => {
   API Endpoints:
   - POST /api/chat              - Chatbot
   - POST /api/reservation       - New reservation
-  - GET  /api/vouchers/validate - Validate voucher
+  - GET  /api/vouchers/:code    - Voucher details
+  - POST /api/vouchers/:code/claim - Claim voucher
   - POST /api/admin/login       - Admin login
   - GET  /api/admin/menu        - Menu CRUD
   - GET  /api/admin/reservations - Reservation history

@@ -50,10 +50,47 @@ function init() {
       is_active INTEGER DEFAULT 1,
       created_at TEXT DEFAULT (datetime('now'))
     );
+
+    CREATE TABLE IF NOT EXISTS customers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      phone TEXT NOT NULL UNIQUE,
+      email TEXT,
+      name TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS voucher_claims (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      voucher_id INTEGER NOT NULL,
+      customer_id INTEGER NOT NULL,
+      claimed_at TEXT DEFAULT (datetime('now')),
+      used_at TEXT,
+      FOREIGN KEY (voucher_id) REFERENCES vouchers(id) ON DELETE CASCADE,
+      FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
+      UNIQUE(voucher_id, customer_id)
+    );
   `);
+
+  // Migrate: add new columns to vouchers (safe: ignore if already exists)
+  migrate();
 
   console.log('Database initialized:', dbPath);
   return db;
+}
+
+/**
+ * Safe migration - add columns that may not exist yet
+ */
+function migrate() {
+  const alterations = [
+    'ALTER TABLE vouchers ADD COLUMN title TEXT',
+    'ALTER TABLE vouchers ADD COLUMN description TEXT',
+    'ALTER TABLE vouchers ADD COLUMN background_image TEXT'
+  ];
+
+  for (const sql of alterations) {
+    try { db.exec(sql); } catch (e) { /* column already exists */ }
+  }
 }
 
 /**
@@ -142,8 +179,8 @@ const reservations = {
 const vouchers = {
   insert(data) {
     const stmt = getDb().prepare(`
-      INSERT INTO vouchers (code, discount_type, discount_value, expiry_date, max_uses, is_active)
-      VALUES (@code, @discount_type, @discount_value, @expiry_date, @max_uses, @is_active)
+      INSERT INTO vouchers (code, discount_type, discount_value, expiry_date, max_uses, is_active, title, description, background_image)
+      VALUES (@code, @discount_type, @discount_value, @expiry_date, @max_uses, @is_active, @title, @description, @background_image)
     `);
     const result = stmt.run({
       code: data.code.toUpperCase(),
@@ -151,7 +188,10 @@ const vouchers = {
       discount_value: data.discount_value,
       expiry_date: data.expiry_date || null,
       max_uses: data.max_uses || null,
-      is_active: data.is_active !== undefined ? (data.is_active ? 1 : 0) : 1
+      is_active: data.is_active !== undefined ? (data.is_active ? 1 : 0) : 1,
+      title: data.title || null,
+      description: data.description || null,
+      background_image: data.background_image || null
     });
     return result.lastInsertRowid;
   },
@@ -178,6 +218,9 @@ const vouchers = {
     if (data.expiry_date !== undefined) { fields.push('expiry_date = @expiry_date'); params.expiry_date = data.expiry_date || null; }
     if (data.max_uses !== undefined) { fields.push('max_uses = @max_uses'); params.max_uses = data.max_uses || null; }
     if (data.is_active !== undefined) { fields.push('is_active = @is_active'); params.is_active = data.is_active ? 1 : 0; }
+    if (data.title !== undefined) { fields.push('title = @title'); params.title = data.title || null; }
+    if (data.description !== undefined) { fields.push('description = @description'); params.description = data.description || null; }
+    if (data.background_image !== undefined) { fields.push('background_image = @background_image'); params.background_image = data.background_image || null; }
 
     if (fields.length === 0) return false;
 
@@ -212,9 +255,116 @@ const vouchers = {
   }
 };
 
+// ==========================================
+// CUSTOMERS
+// ==========================================
+
+const customers = {
+  findOrCreate(phone, data = {}) {
+    let customer = getDb().prepare('SELECT * FROM customers WHERE phone = ?').get(phone);
+    if (customer) {
+      // Update optional fields if provided
+      const updates = [];
+      const params = { id: customer.id };
+      if (data.email && !customer.email) { updates.push('email = @email'); params.email = data.email; }
+      if (data.name && !customer.name) { updates.push('name = @name'); params.name = data.name; }
+      if (updates.length > 0) {
+        getDb().prepare(`UPDATE customers SET ${updates.join(', ')} WHERE id = @id`).run(params);
+        customer = getDb().prepare('SELECT * FROM customers WHERE id = ?').get(customer.id);
+      }
+      return customer;
+    }
+
+    const stmt = getDb().prepare('INSERT INTO customers (phone, email, name) VALUES (@phone, @email, @name)');
+    const result = stmt.run({
+      phone,
+      email: data.email || null,
+      name: data.name || null
+    });
+    return getDb().prepare('SELECT * FROM customers WHERE id = ?').get(result.lastInsertRowid);
+  },
+
+  getByPhone(phone) {
+    return getDb().prepare('SELECT * FROM customers WHERE phone = ?').get(phone);
+  }
+};
+
+// ==========================================
+// VOUCHER CLAIMS
+// ==========================================
+
+const voucherClaims = {
+  claim(voucherId, customerId) {
+    const existing = getDb().prepare(
+      'SELECT * FROM voucher_claims WHERE voucher_id = ? AND customer_id = ?'
+    ).get(voucherId, customerId);
+    if (existing) return existing;
+
+    const stmt = getDb().prepare(
+      'INSERT INTO voucher_claims (voucher_id, customer_id) VALUES (?, ?)'
+    );
+    const result = stmt.run(voucherId, customerId);
+
+    // Increment voucher uses
+    vouchers.incrementUses(voucherId);
+
+    return getDb().prepare('SELECT * FROM voucher_claims WHERE id = ?').get(result.lastInsertRowid);
+  },
+
+  getByVoucher(voucherId) {
+    return getDb().prepare(`
+      SELECT vc.*, c.phone, c.email, c.name as customer_name
+      FROM voucher_claims vc
+      JOIN customers c ON c.id = vc.customer_id
+      WHERE vc.voucher_id = ?
+      ORDER BY vc.claimed_at DESC
+    `).all(voucherId);
+  },
+
+  getByCustomerPhone(phone) {
+    const customer = customers.getByPhone(phone);
+    if (!customer) return [];
+    return getDb().prepare(`
+      SELECT vc.*, v.code, v.title, v.description, v.discount_type, v.discount_value,
+             v.expiry_date, v.is_active, v.background_image
+      FROM voucher_claims vc
+      JOIN vouchers v ON v.id = vc.voucher_id
+      WHERE vc.customer_id = ?
+      ORDER BY vc.claimed_at DESC
+    `).all(customer.id);
+  },
+
+  getClaimForCustomerVoucher(voucherId, phone) {
+    const customer = customers.getByPhone(phone);
+    if (!customer) return null;
+    return getDb().prepare(
+      'SELECT * FROM voucher_claims WHERE voucher_id = ? AND customer_id = ?'
+    ).get(voucherId, customer.id);
+  },
+
+  markUsed(claimId) {
+    return getDb().prepare(
+      "UPDATE voucher_claims SET used_at = datetime('now') WHERE id = ? AND used_at IS NULL"
+    ).run(claimId).changes > 0;
+  },
+
+  getClaimCounts(voucherId) {
+    const row = getDb().prepare(`
+      SELECT
+        COUNT(*) as claimed,
+        SUM(CASE WHEN used_at IS NOT NULL THEN 1 ELSE 0 END) as used
+      FROM voucher_claims
+      WHERE voucher_id = ?
+    `).get(voucherId);
+    return { claimed: row.claimed, used: row.used };
+  }
+};
+
 module.exports = {
   init,
   getDb,
   reservations,
-  vouchers
+  vouchers,
+  customers,
+  voucherClaims
 };

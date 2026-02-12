@@ -41,15 +41,16 @@
           <thead>
             <tr>
               <th>Code</th>
+              <th>Titre</th>
               <th>Reduction</th>
               <th>Expiration</th>
-              <th>Utilisations</th>
+              <th>Claims</th>
               <th>Statut</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="vouchersBody">
-            <tr><td colspan="6" class="table-empty">Chargement...</td></tr>
+            <tr><td colspan="7" class="table-empty">Chargement...</td></tr>
           </tbody>
         </table>
       </div>
@@ -68,6 +69,14 @@
         <div class="form-group">
           <label>Code</label>
           <input type="text" id="voucherCode" class="form-control" placeholder="ex: BIENVENUE10" style="text-transform:uppercase">
+        </div>
+        <div class="form-group">
+          <label>Titre</label>
+          <input type="text" id="voucherTitleInput" class="form-control" placeholder="ex: Bienvenue chez Marifah !">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="voucherDesc" class="form-control" placeholder="Texte marketing visible par le client" rows="3"></textarea>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -93,6 +102,16 @@
           </div>
         </div>
         <div class="form-group">
+          <label>Image de fond</label>
+          <div class="upload-preview" id="bgPreview">
+            <div class="upload-preview__placeholder" id="bgPlaceholder">Aucune image</div>
+            <img id="bgPreviewImg" class="upload-preview__img hidden" src="" alt="Apercu">
+            <button type="button" class="btn btn--danger btn--sm upload-preview__remove hidden" id="bgRemoveBtn" onclick="VoucherAdmin.removeBackground()">&#10005;</button>
+          </div>
+          <input type="file" id="bgFileInput" accept=".jpg,.jpeg,.png,.webp" style="margin-top:8px">
+          <p style="font-size:12px;color:var(--color-text-muted);margin-top:4px">JPG, PNG ou WebP. Max 2 MB. Enregistrez d'abord le voucher, puis l'image sera uploadee.</p>
+        </div>
+        <div class="form-group">
           <label style="font-weight:normal;font-size:14px">
             <input type="checkbox" id="voucherActive" checked> Actif
           </label>
@@ -105,16 +124,28 @@
     </div>
   </div>
 
-  <!-- QR Modal -->
-  <div id="qrModal" class="modal-overlay">
-    <div class="modal" style="max-width:380px">
+  <!-- Claims Modal -->
+  <div id="claimsModal" class="modal-overlay">
+    <div class="modal" style="max-width:640px">
       <div class="modal__header">
-        <h3 id="qrModalTitle">QR Code</h3>
-        <button class="modal__close" onclick="Admin.closeModal('qrModal')">&times;</button>
+        <h3 id="claimsModalTitle">Claims</h3>
+        <button class="modal__close" onclick="Admin.closeModal('claimsModal')">&times;</button>
       </div>
-      <div class="modal__body qr-display">
-        <img id="qrImage" src="" alt="QR Code" width="280">
-        <p style="margin-top:12px;color:var(--color-text-muted);font-size:13px" id="qrCode"></p>
+      <div class="modal__body">
+        <table class="claims-table">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Telephone</th>
+              <th>Reclame le</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="claimsBody">
+            <tr><td colspan="5" class="table-empty">Chargement...</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

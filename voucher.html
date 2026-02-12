@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votre bon - Marifah Restaurant Thai</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/voucher.css">
+</head>
+<body>
+  <div class="voucher-page">
+
+    <!-- Loading state -->
+    <div id="stateLoading" class="voucher-loading">
+      <div class="voucher-loading__spinner"></div>
+      <p>Chargement du bon...</p>
+    </div>
+
+    <!-- Error state -->
+    <div id="stateError" class="voucher-error hidden">
+      <div class="voucher-error__icon">&#128683;</div>
+      <h2 class="voucher-error__title" id="errorTitle">Bon introuvable</h2>
+      <p class="voucher-error__text" id="errorText">Ce lien n'est pas valide ou le bon a expire.</p>
+    </div>
+
+    <!-- Voucher display -->
+    <div id="stateVoucher" class="hidden">
+
+      <!-- Voucher card -->
+      <div class="voucher-card" id="voucherCard">
+        <div class="voucher-card__bg" id="voucherBg"></div>
+        <div class="voucher-card__overlay"></div>
+        <div class="voucher-card__badge hidden" id="voucherBadge"></div>
+        <div class="voucher-card__content">
+          <div class="voucher-card__discount" id="voucherDiscount"></div>
+          <div class="voucher-card__title" id="voucherTitle"></div>
+          <div class="voucher-card__description" id="voucherDescription"></div>
+          <div class="voucher-card__expiry" id="voucherExpiry"></div>
+        </div>
+      </div>
+
+      <!-- Active voucher message (shown after claim) -->
+      <div id="stateActive" class="voucher-active-msg hidden">
+        <div class="voucher-active-msg__icon">&#9989;</div>
+        <div class="voucher-active-msg__title">Bon actif</div>
+        <div class="voucher-active-msg__text">Montrez ce bon au serveur lors de votre visite chez Marifah.</div>
+      </div>
+
+      <!-- Used voucher message -->
+      <div id="stateUsed" class="voucher-used-msg hidden">
+        <div class="voucher-used-msg__title">Bon utilise</div>
+        <div class="voucher-used-msg__text">Ce bon a deja ete utilise. Merci de votre visite !</div>
+      </div>
+
+      <!-- Claim form (shown when not yet claimed) -->
+      <div id="stateClaim" class="voucher-claim hidden">
+        <h3 class="voucher-claim__title">Recuperez votre bon</h3>
+        <p class="voucher-claim__subtitle">Entrez votre numero de telephone pour activer ce bon.</p>
+        <div class="voucher-claim__error" id="claimError"></div>
+        <div class="form-group">
+          <label for="claimPhone">Telephone *</label>
+          <input type="tel" id="claimPhone" placeholder="+41 79 123 45 67" required>
+        </div>
+        <div class="form-group">
+          <label for="claimName">Nom <span class="optional">(optionnel)</span></label>
+          <input type="text" id="claimName" placeholder="Votre nom">
+        </div>
+        <div class="form-group">
+          <label for="claimEmail">Email <span class="optional">(optionnel)</span></label>
+          <input type="email" id="claimEmail" placeholder="votre@email.com">
+        </div>
+        <button class="voucher-claim__btn" id="claimBtn" onclick="VoucherPage.claim()">Activer mon bon</button>
+      </div>
+    </div>
+
+    <!-- Branding -->
+    <div class="voucher-branding">
+      <div class="voucher-branding__name">Marifah</div>
+      <div class="voucher-branding__address">
+        Restaurant Thai &middot; Meyrin, Geneve<br>
+        Rue De-Livron 10, 1217 Meyrin
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/voucher.js"></script>
+</body>
+</html>
