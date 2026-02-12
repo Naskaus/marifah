@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Contact - Restaurant Marifah | Thai Restaurant Meyrin</title>
+  <meta name="description" content="Contactez le Restaurant Marifah. Rue Virginio-Malnati 42, 1217 Meyrin. Près de l'aéroport de Genève. Tel: 022 782 55 69">
+
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@200;300;400;500;600&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .contact-page {
+      padding-top: calc(var(--header-height) + var(--space-8));
+      min-height: 100vh;
+    }
+
+    .contact-header {
+      text-align: center;
+      padding: var(--space-12) 0;
+      background: linear-gradient(135deg, var(--green-50) 0%, var(--cream) 100%);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      padding: var(--space-12) 0;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .contact-card {
+      background: var(--white);
+      padding: var(--space-6);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-fast);
+    }
+
+    .contact-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+
+    .contact-card__icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--green-100), var(--green-50));
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-4);
+      color: var(--green-600);
+    }
+
+    .contact-card__title {
+      font-size: var(--text-lg);
+      font-weight: var(--font-semibold);
+      margin-bottom: var(--space-2);
+    }
+
+    .contact-card__content {
+      color: var(--gray-600);
+      line-height: var(--leading-relaxed);
+    }
+
+    .contact-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+      font-weight: var(--font-medium);
+    }
+
+    /* Map */
+    .contact-map {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      height: 100%;
+      min-height: 500px;
+    }
+
+    .contact-map iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Hours table */
+    .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .hours-table tr {
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .hours-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .hours-table td {
+      padding: var(--space-3) 0;
+    }
+
+    .hours-table td:first-child {
+      font-weight: var(--font-medium);
+      color: var(--gray-700);
+    }
+
+    .hours-table td:last-child {
+      text-align: right;
+      color: var(--gray-600);
+    }
+
+    .hours-closed {
+      color: var(--chili-red);
+    }
+
+    /* Contact buttons */
+    .contact-buttons {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      margin-top: var(--space-8);
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-4) var(--space-6);
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-semibold);
+      transition: all var(--transition-fast);
+      text-decoration: none;
+    }
+
+    .contact-btn--phone {
+      background: var(--green-500);
+      color: var(--white);
+    }
+
+    .contact-btn--phone:hover {
+      background: var(--green-600);
+      color: var(--white);
+    }
+
+    .contact-btn--whatsapp {
+      background: #25D366;
+      color: var(--white);
+    }
+
+    .contact-btn--whatsapp:hover {
+      background: #128C7E;
+      color: var(--white);
+    }
+
+    .contact-btn--email {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+
+    .contact-btn--email:hover {
+      background: var(--gray-200);
+      color: var(--gray-800);
+    }
+
+    /* Transport section */
+    .transport-section {
+      background: var(--green-50);
+      padding: var(--space-12) 0;
+    }
+
+    .transport-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .transport-card {
+      background: var(--white);
+      padding: var(--space-6);
+      border-radius: var(--radius-xl);
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .transport-card__icon {
+      font-size: 48px;
+      margin-bottom: var(--space-4);
+    }
+
+    .transport-card__title {
+      font-size: var(--text-lg);
+      font-weight: var(--font-semibold);
+      margin-bottom: var(--space-2);
+    }
+
+    .transport-card__text {
+      color: var(--gray-600);
+      font-size: var(--text-sm);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-map {
+        min-height: 400px;
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header__inner">
+      <a href="/" class="logo">
+        <svg class="logo__icon" viewBox="0 0 48 48" fill="none">
+          <path d="M24 8C24 8 27 14 33 17C33 17 27 20 24 26C24 26 21 20 15 17C15 17 21 14 24 8Z" fill="#22c55e"/>
+          <text x="24" y="38" font-family="Georgia, serif" font-size="14" font-weight="600" font-style="italic" fill="#15803d" text-anchor="middle">M</text>
+        </svg>
+        <span class="logo__text">Marifah</span>
+      </a>
+
+      <nav class="nav">
+        <ul class="nav__list">
+          <li><a href="/" class="nav__link" data-i18n="nav.home">Accueil</a></li>
+          <li><a href="menu.html" class="nav__link" data-i18n="nav.menu">Menu</a></li>
+          <li><a href="reservation.html" class="nav__link" data-i18n="nav.reservation">Réservation</a></li>
+          <li><a href="contact.html" class="nav__link active" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <div class="lang-switcher">
+          <button class="lang-switcher__btn active" data-lang="fr">FR</button>
+          <button class="lang-switcher__btn" data-lang="en">EN</button>
+        </div>
+        <a href="reservation.html" class="btn btn--primary btn--sm" data-i18n="nav.book">Réserver</a>
+        <button class="mobile-menu-toggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu__overlay"></div>
+  <nav class="mobile-menu">
+    <ul class="mobile-menu__nav">
+      <li><a href="/">Accueil</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="reservation.html">Réservation</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="contact-page">
+    <!-- Header -->
+    <div class="contact-header">
+      <div class="container">
+        <span class="section__label fade-up" data-i18n="contact.title">Contact</span>
+        <h1 class="section__title fade-up stagger-1" data-i18n="contact.subtitle">Venez nous rendre visite</h1>
+        <p class="fade-up stagger-2" style="max-width: 600px; margin: 0 auto; color: var(--gray-600);">
+          Nous sommes à votre disposition pour toute question ou réservation.
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Info Cards -->
+        <div class="contact-info">
+          <!-- Address -->
+          <div class="contact-card fade-up">
+            <div class="contact-card__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <h3 class="contact-card__title" data-i18n="info.location.title">Adresse</h3>
+            <p class="contact-card__content">
+              Restaurant Marifah<br>
+              Rue Virginio-Malnati 42<br>
+              1217 Meyrin, Suisse
+            </p>
+            <a href="https://maps.app.goo.gl/1KHUGr5UJqFXwYN69" target="_blank" rel="noopener" class="contact-card__link">
+              <span data-i18n="info.location.directions">Voir sur Google Maps</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Hours -->
+          <div class="contact-card fade-up stagger-1">
+            <div class="contact-card__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+            </div>
+            <h3 class="contact-card__title" data-i18n="info.hours.title">Horaires d'ouverture</h3>
+            <table class="hours-table">
+              <tr>
+                <td data-i18n="info.hours.weekdays">Lundi - Vendredi</td>
+                <td>11:00 - 14:30<br>17:30 - 00:00</td>
+              </tr>
+              <tr>
+                <td data-i18n="info.hours.saturday">Samedi</td>
+                <td>17:30 - 00:00</td>
+              </tr>
+              <tr>
+                <td data-i18n="info.hours.sunday">Dimanche</td>
+                <td class="hours-closed" data-i18n="info.hours.closed">Fermé</td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Contact -->
+          <div class="contact-card fade-up stagger-2">
+            <div class="contact-card__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <h3 class="contact-card__title" data-i18n="nav.contact">Contact</h3>
+            <p class="contact-card__content">
+              <strong>Téléphone:</strong> 022 782 55 69<br>
+              <strong>Mobile:</strong> 078 84 99 345<br>
+              <strong>Email:</strong> thaideng62@gmail.com
+            </p>
+          </div>
+
+          <!-- Payment -->
+          <div class="contact-card fade-up stagger-3">
+            <div class="contact-card__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
+            <h3 class="contact-card__title" data-i18n="info.payment.title">Moyens de paiement</h3>
+            <p class="contact-card__content" data-i18n="info.payment.methods">
+              Visa, Mastercard, Maestro, American Express, Postcard, Espèces, Tickets restaurant
+            </p>
+          </div>
+
+          <!-- Contact Buttons -->
+          <div class="contact-buttons fade-up stagger-4">
+            <a href="tel:+41227825569" class="contact-btn contact-btn--phone">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+              Appeler
+            </a>
+            <a href="https://wa.me/41788499345" target="_blank" class="contact-btn contact-btn--whatsapp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              WhatsApp
+            </a>
+            <a href="mailto:thaideng62@gmail.com" class="contact-btn contact-btn--email">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              Email
+            </a>
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div class="contact-map fade-right">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2760.123456789!2d6.067!3d46.2268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDbCsDEzJzM2LjUiTiA2wrAwNCcwMS4wIkU!5e0!3m2!1sfr!2sch!4v1234567890"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Restaurant Marifah - Google Maps"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transport Section -->
+    <section class="transport-section">
+      <div class="container">
+        <h2 class="section__title text-center fade-up" style="margin-bottom: var(--space-10);">
+          Comment nous rejoindre
+        </h2>
+
+        <div class="transport-grid">
+          <!-- Tram -->
+          <div class="transport-card fade-up stagger-1">
+            <div class="transport-card__icon">🚊</div>
+            <h3 class="transport-card__title">Tram</h3>
+            <p class="transport-card__text">
+              <strong>Ligne 18</strong><br>
+              Arrêt "Meyrin Village"<br>
+              2 minutes à pied
+            </p>
+          </div>
+
+          <!-- Car -->
+          <div class="transport-card fade-up stagger-2">
+            <div class="transport-card__icon">🚗</div>
+            <h3 class="transport-card__title">Voiture</h3>
+            <p class="transport-card__text">
+              <strong>Parking gratuit</strong><br>
+              Places disponibles<br>
+              juste en face du restaurant
+            </p>
+          </div>
+
+          <!-- Airport -->
+          <div class="transport-card fade-up stagger-3">
+            <div class="transport-card__icon">✈️</div>
+            <h3 class="transport-card__title">Aéroport</h3>
+            <p class="transport-card__text">
+              <strong>GVA Airport</strong><br>
+              10 minutes en voiture<br>
+              ou Tram 18 direct
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="container">
+        <div class="cta__content fade-up">
+          <h2 class="cta__title" data-i18n="cta.title">Réservez votre table</h2>
+          <p class="cta__text">
+            Pour une expérience culinaire thaïlandaise authentique à Meyrin.
+          </p>
+          <a href="reservation.html" class="btn btn--primary btn--lg">
+            Réserver maintenant
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+              <path d="M24 8C24 8 27 14 33 17C33 17 27 20 24 26C24 26 21 20 15 17C15 17 21 14 24 8Z" fill="#22c55e"/>
+              <text x="24" y="38" font-family="Georgia, serif" font-size="14" font-weight="600" font-style="italic" fill="#22c55e" text-anchor="middle">M</text>
+            </svg>
+            <span class="footer__logo-text">Marifah</span>
+          </div>
+          <p class="footer__description">
+            Restaurant thaïlandais authentique à Meyrin, Genève.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer__title">Navigation</h4>
+          <ul class="footer__links">
+            <li><a href="/">Accueil</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="reservation.html">Réservation</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__title">Horaires</h4>
+          <ul class="footer__links">
+            <li>Lun-Ven: 11:00-14:30, 17:30-00:00</li>
+            <li>Samedi: 17:30-00:00</li>
+            <li>Dimanche: Fermé</li>
+          </ul>
+        </div>
+
+        <div class="footer__contact">
+          <h4 class="footer__title">Contact</h4>
+          <p>📞 022 782 55 69</p>
+          <p>📧 thaideng62@gmail.com</p>
+          <p>📍 Rue Virginio-Malnati 42, 1217 Meyrin</p>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copyright">© 2024 Restaurant Marifah. Tous droits réservés.</p>
+        <div class="footer__social">
+          <a href="https://www.facebook.com/people/Marifah/100079350593086/" target="_blank" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/i18n.js" defer></script>
+  <script src="js/animations.js" defer></script>
+</body>
+</html>

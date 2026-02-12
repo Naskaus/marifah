@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Menu - Restaurant Marifah | Thai Food Meyrin Geneva</title>
+  <meta name="description" content="Découvrez notre menu thaïlandais authentique. Entrées, currys, plats sautés, desserts. Restaurant Marifah à Meyrin, près de l'aéroport de Genève.">
+
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@200;300;400;500;600&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    /* Menu Page Specific Styles */
+    .menu-page {
+      padding-top: calc(var(--header-height) + var(--space-8));
+      min-height: 100vh;
+    }
+
+    .menu-header {
+      text-align: center;
+      padding: var(--space-12) 0;
+      background: linear-gradient(135deg, var(--green-50) 0%, var(--cream) 100%);
+    }
+
+    .menu-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: var(--space-8);
+      padding: var(--space-8) 0;
+    }
+
+    /* Sidebar */
+    .menu-sidebar {
+      position: sticky;
+      top: calc(var(--header-height) + var(--space-4));
+      height: fit-content;
+      padding: var(--space-6);
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+    }
+
+    .menu-sidebar__title {
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wider);
+      margin-bottom: var(--space-4);
+    }
+
+    .menu-sidebar__list {
+      list-style: none;
+    }
+
+    .menu-sidebar__item {
+      margin-bottom: var(--space-2);
+    }
+
+    .menu-sidebar__link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-sm);
+      color: var(--gray-600);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+    }
+
+    .menu-sidebar__link:hover,
+    .menu-sidebar__link.active {
+      background: var(--green-50);
+      color: var(--green-700);
+    }
+
+    .menu-sidebar__link.active {
+      font-weight: var(--font-semibold);
+      position: relative;
+    }
+
+    .menu-sidebar__link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 70%;
+      background: var(--color-primary);
+      border-radius: var(--radius-full);
+    }
+
+    /* Filters */
+    .menu-filters {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-6);
+    }
+
+    .filter-btn {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--gray-600);
+      background: var(--white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--green-100);
+      border-color: var(--green-300);
+      color: var(--green-700);
+    }
+
+    /* Menu Section */
+    .menu-section {
+      margin-bottom: var(--space-12);
+      scroll-margin-top: calc(var(--header-height) + var(--space-4));
+    }
+
+    .menu-section__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 2px solid var(--green-100);
+    }
+
+    .menu-section__icon {
+      font-size: var(--text-2xl);
+    }
+
+    .menu-section__title {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-semibold);
+      color: var(--gray-900);
+    }
+
+    /* Menu Items Grid */
+    .menu-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border-light);
+      transition: all var(--transition-fast);
+    }
+
+    .menu-item:hover {
+      border-color: var(--green-200);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .menu-item__content {
+      flex: 1;
+    }
+
+    .menu-item__header {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+      margin-bottom: var(--space-1);
+    }
+
+    .menu-item__number {
+      font-size: var(--text-xs);
+      font-weight: var(--font-semibold);
+      color: var(--gray-400);
+      min-width: 24px;
+    }
+
+    .menu-item__name {
+      font-size: var(--text-base);
+      font-weight: var(--font-semibold);
+      color: var(--gray-900);
+    }
+
+    .menu-item__description {
+      font-size: var(--text-sm);
+      color: var(--gray-500);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-2);
+    }
+
+    .menu-item__tags {
+      display: flex;
+      gap: var(--space-1);
+    }
+
+    .menu-item__tag {
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+    }
+
+    .menu-item__tag--spicy {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .menu-item__tag--vegetarian {
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    .menu-item__tag--popular {
+      background: #fef9c3;
+      color: #ca8a04;
+    }
+
+    .menu-item__price {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .menu-item__price-main {
+      font-size: var(--text-lg);
+      font-weight: var(--font-bold);
+      color: var(--green-600);
+    }
+
+    .menu-item__price-half {
+      font-size: var(--text-xs);
+      color: var(--gray-500);
+    }
+
+    /* Search */
+    .menu-search {
+      position: relative;
+      margin-bottom: var(--space-6);
+    }
+
+    .menu-search__input {
+      width: 100%;
+      padding: var(--space-3) var(--space-4) var(--space-3) var(--space-12);
+      font-size: var(--text-base);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      transition: all var(--transition-fast);
+    }
+
+    .menu-search__input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    }
+
+    .menu-search__icon {
+      position: absolute;
+      left: var(--space-4);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .menu-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-sidebar {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        padding: var(--space-4);
+      }
+
+      .menu-sidebar__title {
+        width: 100%;
+        margin-bottom: var(--space-2);
+      }
+
+      .menu-sidebar__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+      }
+
+      .menu-sidebar__link {
+        padding: var(--space-2) var(--space-3);
+        background: var(--gray-100);
+        border-radius: var(--radius-full);
+      }
+
+      .menu-sidebar__link.active::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .menu-items {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header (same as index) -->
+  <header class="header" id="header">
+    <div class="header__inner">
+      <a href="/" class="logo">
+        <svg class="logo__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 8C24 8 27 14 33 17C33 17 27 20 24 26C24 26 21 20 15 17C15 17 21 14 24 8Z" fill="#22c55e"/>
+          <text x="24" y="38" font-family="Georgia, serif" font-size="14" font-weight="600" font-style="italic" fill="#15803d" text-anchor="middle">M</text>
+        </svg>
+        <span class="logo__text">Marifah</span>
+      </a>
+
+      <nav class="nav">
+        <ul class="nav__list">
+          <li><a href="/" class="nav__link" data-i18n="nav.home">Accueil</a></li>
+          <li><a href="menu.html" class="nav__link active" data-i18n="nav.menu">Menu</a></li>
+          <li><a href="reservation.html" class="nav__link" data-i18n="nav.reservation">Réservation</a></li>
+          <li><a href="contact.html" class="nav__link" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <div class="lang-switcher">
+          <button class="lang-switcher__btn active" data-lang="fr">FR</button>
+          <button class="lang-switcher__btn" data-lang="en">EN</button>
+        </div>
+        <a href="reservation.html" class="btn btn--primary btn--sm" data-i18n="nav.book">Réserver</a>
+        <button class="mobile-menu-toggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu__overlay"></div>
+  <nav class="mobile-menu">
+    <ul class="mobile-menu__nav">
+      <li><a href="/" data-i18n="nav.home">Accueil</a></li>
+      <li><a href="menu.html" data-i18n="nav.menu">Menu</a></li>
+      <li><a href="reservation.html" data-i18n="nav.reservation">Réservation</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="menu-page">
+    <!-- Header -->
+    <div class="menu-header">
+      <div class="container">
+        <span class="section__label fade-up" data-i18n="menu.title">Notre Carte</span>
+        <h1 class="section__title fade-up stagger-1" data-i18n="menu.subtitle">
+          Découvrez nos spécialités thaïlandaises
+        </h1>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="menu-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="menu-sidebar fade-left">
+          <h3 class="menu-sidebar__title" data-i18n="menu.filter.all">Catégories</h3>
+          <ul class="menu-sidebar__list" id="categoryNav">
+            <!-- Generated by JS -->
+          </ul>
+        </aside>
+
+        <!-- Menu Content -->
+        <div class="menu-content">
+          <!-- Search -->
+          <div class="menu-search fade-up">
+            <svg class="menu-search__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" class="menu-search__input" id="menuSearch" placeholder="Rechercher un plat..." data-i18n="menu.search">
+          </div>
+
+          <!-- Filters -->
+          <div class="menu-filters fade-up stagger-1">
+            <button class="filter-btn active" data-filter="all" data-i18n="menu.filter.all">Tout</button>
+            <button class="filter-btn" data-filter="popular">⭐ Populaire</button>
+            <button class="filter-btn" data-filter="spicy">🌶️ Épicé</button>
+            <button class="filter-btn" data-filter="vegetarian">🌱 Végétarien</button>
+          </div>
+
+          <!-- Menu Sections -->
+          <div id="menuSections">
+            <!-- Generated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__bottom" style="border-top: none; padding-top: var(--space-4);">
+        <p class="footer__copyright">© 2024 Restaurant Marifah</p>
+        <a href="/" class="btn btn--outline btn--sm">Retour à l'accueil</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/i18n.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/menu.js" defer></script>
+</body>
+</html>

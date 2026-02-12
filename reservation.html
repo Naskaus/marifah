@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Réservation - Restaurant Marifah | Book a Table</title>
+  <meta name="description" content="Réservez votre table au Restaurant Marifah. Thai restaurant à Meyrin, Genève. Book your table online.">
+
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@200;300;400;500;600&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .reservation-page {
+      padding-top: calc(var(--header-height) + var(--space-8));
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--green-50) 0%, var(--cream) 50%, var(--green-50) 100%);
+    }
+
+    .reservation-header {
+      text-align: center;
+      padding: var(--space-12) 0;
+    }
+
+    .reservation-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      padding-bottom: var(--space-16);
+    }
+
+    /* Form Styles */
+    .reservation-form-wrapper {
+      background: var(--white);
+      padding: var(--space-8);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .reservation-form__title {
+      font-size: var(--text-xl);
+      font-weight: var(--font-semibold);
+      margin-bottom: var(--space-6);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .form-group {
+      margin-bottom: var(--space-4);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--gray-700);
+      margin-bottom: var(--space-2);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--text-base);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      transition: all var(--transition-fast);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+
+    .form-submit {
+      width: 100%;
+      margin-top: var(--space-4);
+    }
+
+    /* Chatbot Styles */
+    .chatbot-wrapper {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+      overflow: hidden;
+    }
+
+    .chatbot-header {
+      padding: var(--space-4) var(--space-6);
+      background: linear-gradient(135deg, var(--green-500), var(--green-600));
+      color: var(--white);
+    }
+
+    .chatbot-header__title {
+      font-size: var(--text-lg);
+      font-weight: var(--font-semibold);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .chatbot-header__subtitle {
+      font-size: var(--text-sm);
+      opacity: 0.9;
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .chat-message {
+      max-width: 85%;
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-lg);
+      animation: messageIn 0.3s ease;
+    }
+
+    @keyframes messageIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chat-message--bot {
+      align-self: flex-start;
+      background: var(--gray-100);
+      color: var(--gray-800);
+      border-bottom-left-radius: var(--radius-sm);
+    }
+
+    .chat-message--user {
+      align-self: flex-end;
+      background: var(--green-500);
+      color: var(--white);
+      border-bottom-right-radius: var(--radius-sm);
+    }
+
+    .chat-message__text {
+      font-size: var(--text-sm);
+      line-height: var(--leading-relaxed);
+    }
+
+    .chat-message__time {
+      font-size: 10px;
+      opacity: 0.7;
+      margin-top: var(--space-1);
+    }
+
+    .chatbot-input {
+      padding: var(--space-4);
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .chatbot-input__field {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-full);
+      font-size: var(--text-sm);
+      transition: all var(--transition-fast);
+    }
+
+    .chatbot-input__field:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    .chatbot-input__btn {
+      width: 44px;
+      height: 44px;
+      background: var(--color-primary);
+      border: none;
+      border-radius: 50%;
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .chatbot-input__btn:hover {
+      background: var(--green-600);
+      transform: scale(1.05);
+    }
+
+    .chatbot-input__btn:disabled {
+      background: var(--gray-300);
+      cursor: not-allowed;
+    }
+
+    /* Quick replies */
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .quick-reply {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-xs);
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-full);
+      color: var(--green-700);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .quick-reply:hover {
+      background: var(--green-100);
+      border-color: var(--green-300);
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: var(--space-3) var(--space-4);
+      background: var(--gray-100);
+      border-radius: var(--radius-lg);
+      width: fit-content;
+    }
+
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      background: var(--gray-400);
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    /* Success message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: var(--space-8);
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--green-100);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-4);
+      animation: successPop 0.5s var(--ease-out-back);
+    }
+
+    @keyframes successPop {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .reservation-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .chatbot-wrapper {
+        height: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header__inner">
+      <a href="/" class="logo">
+        <svg class="logo__icon" viewBox="0 0 48 48" fill="none">
+          <path d="M24 8C24 8 27 14 33 17C33 17 27 20 24 26C24 26 21 20 15 17C15 17 21 14 24 8Z" fill="#22c55e"/>
+          <text x="24" y="38" font-family="Georgia, serif" font-size="14" font-weight="600" font-style="italic" fill="#15803d" text-anchor="middle">M</text>
+        </svg>
+        <span class="logo__text">Marifah</span>
+      </a>
+
+      <nav class="nav">
+        <ul class="nav__list">
+          <li><a href="/" class="nav__link" data-i18n="nav.home">Accueil</a></li>
+          <li><a href="menu.html" class="nav__link" data-i18n="nav.menu">Menu</a></li>
+          <li><a href="reservation.html" class="nav__link active" data-i18n="nav.reservation">Réservation</a></li>
+          <li><a href="contact.html" class="nav__link" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <div class="lang-switcher">
+          <button class="lang-switcher__btn active" data-lang="fr">FR</button>
+          <button class="lang-switcher__btn" data-lang="en">EN</button>
+        </div>
+        <button class="mobile-menu-toggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu__overlay"></div>
+  <nav class="mobile-menu">
+    <ul class="mobile-menu__nav">
+      <li><a href="/">Accueil</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="reservation.html">Réservation</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="reservation-page">
+    <div class="container">
+      <!-- Header -->
+      <div class="reservation-header">
+        <span class="section__label fade-up" data-i18n="reservation.title">Réservation</span>
+        <h1 class="section__title fade-up stagger-1" data-i18n="reservation.subtitle">Réservez votre table</h1>
+        <p class="fade-up stagger-2" style="max-width: 600px; margin: 0 auto; color: var(--gray-600);">
+          Remplissez le formulaire ou discutez avec notre assistant pour réserver votre table.
+        </p>
+      </div>
+
+      <div class="reservation-layout">
+        <!-- Reservation Form -->
+        <div class="reservation-form-wrapper fade-left">
+          <form id="reservationForm">
+            <h2 class="reservation-form__title">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span data-i18n="reservation.form.title">Formulaire de réservation</span>
+            </h2>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="name" data-i18n="reservation.form.name">Nom complet *</label>
+                <input type="text" id="name" name="name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="email" data-i18n="reservation.form.email">Email *</label>
+                <input type="email" id="email" name="email" class="form-input" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="phone" data-i18n="reservation.form.phone">Téléphone *</label>
+              <input type="tel" id="phone" name="phone" class="form-input" required placeholder="+41 XX XXX XX XX">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="date" data-i18n="reservation.form.date">Date *</label>
+                <input type="date" id="date" name="date" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="time" data-i18n="reservation.form.time">Heure *</label>
+                <select id="time" name="time" class="form-select" required>
+                  <option value="">Choisir...</option>
+                  <optgroup label="Midi">
+                    <option value="11:30">11:30</option>
+                    <option value="12:00">12:00</option>
+                    <option value="12:30">12:30</option>
+                    <option value="13:00">13:00</option>
+                    <option value="13:30">13:30</option>
+                    <option value="14:00">14:00</option>
+                  </optgroup>
+                  <optgroup label="Soir">
+                    <option value="18:00">18:00</option>
+                    <option value="18:30">18:30</option>
+                    <option value="19:00">19:00</option>
+                    <option value="19:30">19:30</option>
+                    <option value="20:00">20:00</option>
+                    <option value="20:30">20:30</option>
+                    <option value="21:00">21:00</option>
+                    <option value="21:30">21:30</option>
+                    <option value="22:00">22:00</option>
+                    <option value="22:30">22:30</option>
+                    <option value="23:00">23:00</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="guests" data-i18n="reservation.form.guests">Nombre de personnes *</label>
+              <select id="guests" name="guests" class="form-select" required>
+                <option value="">Choisir...</option>
+                <option value="1">1 personne</option>
+                <option value="2">2 personnes</option>
+                <option value="3">3 personnes</option>
+                <option value="4">4 personnes</option>
+                <option value="5">5 personnes</option>
+                <option value="6">6 personnes</option>
+                <option value="7">7 personnes</option>
+                <option value="8">8 personnes</option>
+                <option value="9+">9+ personnes (nous contacter)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="message" data-i18n="reservation.form.message">Message (optionnel)</label>
+              <textarea id="message" name="message" class="form-textarea" placeholder="Allergies, demandes spéciales..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--lg form-submit btn-shine" data-i18n="reservation.form.submit">
+              Confirmer la réservation
+            </button>
+          </form>
+
+          <!-- Success Message -->
+          <div class="success-message" id="successMessage">
+            <div class="success-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--green-500)" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <h3 style="margin-bottom: var(--space-2);">Réservation envoyée !</h3>
+            <p style="color: var(--gray-600);">Nous vous confirmerons par email ou téléphone dans les plus brefs délais.</p>
+            <button type="button" class="btn btn--outline" style="margin-top: var(--space-4);" onclick="resetForm()">
+              Nouvelle réservation
+            </button>
+          </div>
+        </div>
+
+        <!-- Chatbot -->
+        <div class="chatbot-wrapper fade-right">
+          <div class="chatbot-header">
+            <div class="chatbot-header__title">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.2)"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4-8c.79 0 1.5-.71 1.5-1.5S8.79 9 8 9s-1.5.71-1.5 1.5S7.21 11 8 11zm8 0c.79 0 1.5-.71 1.5-1.5S16.79 9 16 9s-1.5.71-1.5 1.5.71 1.5 1.5 1.5zm-4 4c2.21 0 4-1.79 4-4h-8c0 2.21 1.79 4 4 4z"/>
+              </svg>
+              Assistant Marifah
+            </div>
+            <p class="chatbot-header__subtitle">Je suis là pour vous aider</p>
+          </div>
+
+          <div class="chatbot-messages" id="chatMessages">
+            <div class="chat-message chat-message--bot">
+              <p class="chat-message__text">
+                Bonjour ! 👋 Je suis l'assistant du Restaurant Marifah. Comment puis-je vous aider ?
+              </p>
+            </div>
+          </div>
+
+          <div class="quick-replies">
+            <button class="quick-reply" data-message="Je voudrais réserver une table">📅 Réserver</button>
+            <button class="quick-reply" data-message="Quels sont vos horaires ?">🕐 Horaires</button>
+            <button class="quick-reply" data-message="Avez-vous des plats végétariens ?">🌱 Végétarien</button>
+            <button class="quick-reply" data-message="Comment venir au restaurant ?">📍 Accès</button>
+          </div>
+
+          <div class="chatbot-input">
+            <input type="text" class="chatbot-input__field" id="chatInput" placeholder="Écrivez votre message...">
+            <button class="chatbot-input__btn" id="chatSend" aria-label="Envoyer">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div style="text-align: center; padding: var(--space-8); background: var(--white); border-radius: var(--radius-xl); margin-bottom: var(--space-8);">
+        <p style="color: var(--gray-600); margin-bottom: var(--space-4);">
+          Vous pouvez aussi nous contacter directement :
+        </p>
+        <div style="display: flex; justify-content: center; gap: var(--space-6); flex-wrap: wrap;">
+          <a href="tel:+41227825569" class="btn btn--outline">
+            📞 022 782 55 69
+          </a>
+          <a href="https://wa.me/41788499345" target="_blank" class="btn btn--outline" style="border-color: #25D366; color: #25D366;">
+            💬 WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__bottom" style="border-top: none; padding-top: var(--space-4);">
+        <p class="footer__copyright">© 2024 Restaurant Marifah</p>
+        <a href="/" class="btn btn--outline btn--sm">Retour à l'accueil</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/i18n.js" defer></script>
+  <script src="js/chatbot.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Claude Code
+.claude/
+
+# Old website snapshot (reference only)
+Restaurant Marifah*.html
+Restaurant Marifah*_files/
+*.pdf
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Build
+dist/
+build/
+
+# Temp
+*.tmp
+*.temp
+
+# Keep config with API keys out of git (optional - remove if you want to track it)
+# server/config.js

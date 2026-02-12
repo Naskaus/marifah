@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <!-- Background circle -->
+  <circle cx="24" cy="24" r="24" fill="#22c55e"/>
+
+  <!-- Jasmine flower petals -->
+  <path d="M24 6C24 6 28 14 36 18C36 18 28 22 24 30C24 30 20 22 12 18C12 18 20 14 24 6Z" fill="white" opacity="0.3"/>
+  <path d="M24 10C24 10 27 16 33 19C33 19 27 22 24 28C24 28 21 22 15 19C15 19 21 16 24 10Z" fill="white" opacity="0.5"/>
+  <path d="M24 14C24 14 26 18 30 20C30 20 26 22 24 26C24 26 22 22 18 20C18 20 22 18 24 14Z" fill="white"/>
+
+  <!-- M letter -->
+  <text x="24" y="40" font-family="Georgia, serif" font-size="12" font-weight="600" font-style="italic" fill="white" text-anchor="middle">M</text>
+</svg>

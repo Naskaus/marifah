@@ -1,0 +1,144 @@
+{
+  "categories": [
+    {
+      "id": "entrees",
+      "name": { "fr": "Entrées", "en": "Starters" },
+      "icon": "🥢",
+      "items": [
+        { "id": 1, "name": "Popia Thod", "description": { "fr": "Rouleaux de printemps (viande ou légumes)", "en": "Spring rolls (meat or vegetables)" }, "price": 15, "tags": [] },
+        { "id": 2, "name": "Satay Kaï", "description": { "fr": "Poulet frit au lait de coco", "en": "Fried chicken with coconut milk" }, "price": 15, "tags": [] },
+        { "id": 3, "name": "Kiew Thod", "description": { "fr": "Raviolis croustillants aux crevettes", "en": "Crispy shrimp dumplings" }, "price": 15, "tags": [] },
+        { "id": 4, "name": "Kung Homsabay", "description": { "fr": "Crevettes frites enveloppées d'une feuille de brick", "en": "Fried shrimp wrapped in pastry" }, "price": 15, "tags": [] },
+        { "id": 5, "name": "Thod Man Pla", "description": { "fr": "Galettes de poisson frit", "en": "Fried fish cakes" }, "price": 15, "tags": [] },
+        { "id": 6, "name": "Ruam Mit", "description": { "fr": "Assortiment d'entrées", "en": "Starter assortment" }, "price": 30, "halfPrice": 16, "tags": ["popular"] }
+      ]
+    },
+    {
+      "id": "potages",
+      "name": { "fr": "Potages", "en": "Soups" },
+      "icon": "🍜",
+      "items": [
+        { "id": 7, "name": "Tom Yam Kung-Plan", "description": { "fr": "Potage de poissons ou de crevettes à la citronelle", "en": "Fish or shrimp soup with lemongrass" }, "price": 18, "halfPrice": 10, "tags": ["spicy"] },
+        { "id": 8, "name": "Tom Yam Kaï", "description": { "fr": "Potage de poulet à la citronelle", "en": "Chicken soup with lemongrass" }, "price": 17, "halfPrice": 10, "tags": ["spicy"] },
+        { "id": 9, "name": "Tom Kha Kung", "description": { "fr": "Potage de crevettes au lait de coco", "en": "Shrimp soup with coconut milk" }, "price": 17, "halfPrice": 10, "tags": [] },
+        { "id": 10, "name": "Tom Kra Kaï", "description": { "fr": "Potage de poulet au lait de coco", "en": "Chicken soup with coconut milk" }, "price": 17, "halfPrice": 10, "tags": [] },
+        { "id": 11, "name": "Kaeng Juud Phak", "description": { "fr": "Potage de légumes", "en": "Vegetable soup" }, "price": 17, "halfPrice": 10, "tags": ["vegetarian"] },
+        { "id": 12, "name": "Kiew Nam", "description": { "fr": "Potage de raviolis aux crevettes", "en": "Shrimp dumpling soup" }, "price": 18, "halfPrice": 10, "tags": [] }
+      ]
+    },
+    {
+      "id": "salades",
+      "name": { "fr": "Salades", "en": "Salads" },
+      "icon": "🥗",
+      "items": [
+        { "id": 13, "name": "Yam Wounsene", "description": { "fr": "Salade de vermicelles (avec ou sans viande)", "en": "Vermicelli salad (with or without meat)" }, "price": 20, "tags": [] },
+        { "id": 14, "name": "Yam Plamuk-Kung", "description": { "fr": "Salade de calamars ou crevettes", "en": "Squid or shrimp salad" }, "price": 22, "tags": [] },
+        { "id": 15, "name": "Nam Tok Nua", "description": { "fr": "Salade piquante de boeuf grillé", "en": "Spicy grilled beef salad" }, "price": 22, "tags": ["spicy"] },
+        { "id": 16, "name": "Som Tam", "description": { "fr": "Salade de papaye", "en": "Papaya salad" }, "price": 15, "tags": ["spicy", "vegetarian"] },
+        { "id": 17, "name": "Yam Thalay", "description": { "fr": "Salade de fruits de mer", "en": "Seafood salad" }, "price": 25, "tags": [] },
+        { "id": 18, "name": "Yam Mamluing", "description": { "fr": "Salade de mangue verte aux crevettes", "en": "Green mango salad with shrimp" }, "price": 15, "tags": [] }
+      ]
+    },
+    {
+      "id": "porc",
+      "name": { "fr": "Porc", "en": "Pork" },
+      "icon": "🐷",
+      "items": [
+        { "id": 19, "name": "Keang Kiew Wan Moo", "description": { "fr": "Porc au curry vert et au lait de coco", "en": "Pork with green curry and coconut milk" }, "price": 25, "tags": ["spicy"] },
+        { "id": 20, "name": "Keang Deng Moo", "description": { "fr": "Porc au curry rouge et au lait de coco", "en": "Pork with red curry and coconut milk" }, "price": 25, "tags": ["spicy"] },
+        { "id": 21, "name": "Moo Masaman", "description": { "fr": "Porc au curry brun et aux cacahuètes", "en": "Pork with Massaman curry and peanuts" }, "price": 25, "tags": [] },
+        { "id": 22, "name": "Moo Phad Phed", "description": { "fr": "Porc sauté aux piments", "en": "Stir-fried pork with chili" }, "price": 25, "tags": ["spicy"] },
+        { "id": 23, "name": "Moo Phad Phak", "description": { "fr": "Porc sauté aux légumes", "en": "Stir-fried pork with vegetables" }, "price": 25, "tags": [] },
+        { "id": 24, "name": "Phad Priew Wan Moo", "description": { "fr": "Porc à l'aigre-doux", "en": "Sweet and sour pork" }, "price": 25, "tags": [] },
+        { "id": 25, "name": "Moo Phad Kratiew", "description": { "fr": "Porc sauté à l'ail", "en": "Stir-fried pork with garlic" }, "price": 25, "tags": [] },
+        { "id": 26, "name": "Moo Phad Kapraow", "description": { "fr": "Porc sauté aux piments et basilic thaï", "en": "Stir-fried pork with chili and Thai basil" }, "price": 25, "tags": ["spicy"] }
+      ]
+    },
+    {
+      "id": "poulet",
+      "name": { "fr": "Poulet", "en": "Chicken" },
+      "icon": "🍗",
+      "items": [
+        { "id": 27, "name": "Keang Kiew Wan Kay", "description": { "fr": "Poulet au curry vert", "en": "Chicken with green curry" }, "price": 25, "tags": ["spicy"] },
+        { "id": 28, "name": "Kaeng Deng Kay", "description": { "fr": "Poulet au curry rouge", "en": "Chicken with red curry" }, "price": 25, "tags": ["spicy"] },
+        { "id": 29, "name": "Kaeng Karry Kay", "description": { "fr": "Poulet au curry jaune", "en": "Chicken with yellow curry" }, "price": 25, "tags": [] },
+        { "id": 30, "name": "Paneng Kay", "description": { "fr": "Poulet au curry et Panang", "en": "Chicken with Panang curry" }, "price": 25, "tags": ["spicy"] },
+        { "id": 31, "name": "Mansman Kay", "description": { "fr": "Poulet au curry brun et cacahuètes", "en": "Chicken with Massaman curry and peanuts" }, "price": 25, "tags": [] },
+        { "id": 32, "name": "Kay Phad Prik", "description": { "fr": "Poulet sauté aux piments et basilic thaï", "en": "Stir-fried chicken with chili and Thai basil" }, "price": 25, "tags": ["spicy"] },
+        { "id": 33, "name": "Kay Phad Priew Wan", "description": { "fr": "Poulet sauté à l'aigre-doux", "en": "Sweet and sour chicken" }, "price": 25, "tags": [] },
+        { "id": 34, "name": "Kay Phadkhing", "description": { "fr": "Poulet sauté au gingembre", "en": "Stir-fried chicken with ginger" }, "price": 25, "tags": [] },
+        { "id": 35, "name": "Kay Phad Med Mamuing", "description": { "fr": "Poulet sauté aux noix de cajou", "en": "Stir-fried chicken with cashew nuts" }, "price": 25, "tags": ["popular"] },
+        { "id": 36, "name": "Kay Phad Kratiem", "description": { "fr": "Poulet sauté à l'ail", "en": "Stir-fried chicken with garlic" }, "price": 25, "tags": [] },
+        { "id": 37, "name": "Kay Phad Kapraow", "description": { "fr": "Poulet sauté au basilic thaï", "en": "Stir-fried chicken with Thai basil" }, "price": 25, "tags": [] }
+      ]
+    },
+    {
+      "id": "canard",
+      "name": { "fr": "Canard", "en": "Duck" },
+      "icon": "🦆",
+      "items": [
+        { "id": 38, "name": "Ped Yang", "description": { "fr": "Canard laqué", "en": "Roast duck" }, "price": 38, "tags": ["popular"] },
+        { "id": 39, "name": "Ped Phad Sap Parod", "description": { "fr": "Canard sauté à l'ananas et aux noix de cajou", "en": "Stir-fried duck with pineapple and cashew nuts" }, "price": 38, "tags": [] },
+        { "id": 40, "name": "Kaeng Ped Yang", "description": { "fr": "Canard au curry rouge et au lait de coco", "en": "Duck with red curry and coconut milk" }, "price": 38, "tags": ["spicy"] }
+      ]
+    },
+    {
+      "id": "boeuf",
+      "name": { "fr": "Boeuf", "en": "Beef" },
+      "icon": "🥩",
+      "items": [
+        { "id": 41, "name": "Keang Kiew Wan Nua", "description": { "fr": "Boeuf au curry vert et au lait de coco", "en": "Beef with green curry and coconut milk" }, "price": 34, "tags": ["spicy"] },
+        { "id": 42, "name": "Keang Deng Nua", "description": { "fr": "Boeuf au curry rouge et au lait de coco", "en": "Beef with red curry and coconut milk" }, "price": 34, "tags": ["spicy"] },
+        { "id": 43, "name": "Keang Karry Nua", "description": { "fr": "Boeuf au curry jaune et au lait de coco", "en": "Beef with yellow curry and coconut milk" }, "price": 34, "tags": [] },
+        { "id": 44, "name": "Nua Praneng", "description": { "fr": "Boeuf au curry thaï", "en": "Beef with Thai curry" }, "price": 34, "tags": ["spicy"] },
+        { "id": 45, "name": "Massaman Nua", "description": { "fr": "Boeuf au curry brun et aux cacahuètes", "en": "Beef with Massaman curry and peanuts" }, "price": 36, "tags": ["popular"] },
+        { "id": 46, "name": "Nua Phad Phad Phed", "description": { "fr": "Boeuf sauté aux piments", "en": "Stir-fried beef with chili" }, "price": 34, "tags": ["spicy"] },
+        { "id": 47, "name": "Nua Phad Prak", "description": { "fr": "Boeuf sauté aux légumes", "en": "Stir-fried beef with vegetables" }, "price": 34, "tags": [] },
+        { "id": 48, "name": "Nua Phad Nam Man Hoy", "description": { "fr": "Boeuf sauté à la sauce d'huître", "en": "Stir-fried beef with oyster sauce" }, "price": 35, "tags": [] },
+        { "id": 49, "name": "Nua Phad Kratiew", "description": { "fr": "Boeuf sauté à l'ail", "en": "Stir-fried beef with garlic" }, "price": 34, "tags": [] },
+        { "id": 50, "name": "Nua Phad Karphaow", "description": { "fr": "Boeuf sauté aux piments et basilic thaï", "en": "Stir-fried beef with chili and Thai basil" }, "price": 34, "tags": ["spicy", "popular"] }
+      ]
+    },
+    {
+      "id": "vegetarien",
+      "name": { "fr": "Plats végétariens", "en": "Vegetarian" },
+      "icon": "🌱",
+      "items": [
+        { "id": 71, "name": "Phad Prak Tofu", "description": { "fr": "Tofu sauté aux légumes", "en": "Stir-fried tofu with vegetables" }, "price": 25, "tags": ["vegetarian"] },
+        { "id": 72, "name": "Keang Kiem Wan Prak", "description": { "fr": "Légumes mixtes au curry vert", "en": "Mixed vegetables with green curry" }, "price": 23, "tags": ["vegetarian", "spicy"] },
+        { "id": 73, "name": "Keang Deng Prak", "description": { "fr": "Légumes mixtes au curry rouge", "en": "Mixed vegetables with red curry" }, "price": 23, "tags": ["vegetarian", "spicy"] },
+        { "id": 74, "name": "Keang Karry Phak", "description": { "fr": "Légumes mixtes au curry jaune", "en": "Mixed vegetables with yellow curry" }, "price": 23, "tags": ["vegetarian"] },
+        { "id": 75, "name": "Phad Phed Phak", "description": { "fr": "Légumes sautés aux piments et au basilic", "en": "Stir-fried vegetables with chili and basil" }, "price": 23, "tags": ["vegetarian", "spicy"] },
+        { "id": 76, "name": "Kaengjuud Phak", "description": { "fr": "Potage de légumes", "en": "Vegetable soup" }, "price": 17, "tags": ["vegetarian"] },
+        { "id": 77, "name": "Yam Wounsene", "description": { "fr": "Salade de vermicelles aux piments", "en": "Spicy vermicelli salad" }, "price": 22, "tags": ["vegetarian", "spicy"] },
+        { "id": 78, "name": "Popia Thod", "description": { "fr": "Rouleaux de printemps", "en": "Spring rolls" }, "price": 15, "tags": ["vegetarian"] },
+        { "id": 79, "name": "Som Tam", "description": { "fr": "Salade de papaye", "en": "Papaya salad" }, "price": 15, "tags": ["vegetarian", "spicy"] }
+      ]
+    },
+    {
+      "id": "desserts",
+      "name": { "fr": "Desserts", "en": "Desserts" },
+      "icon": "🍨",
+      "items": [
+        { "id": 80, "name": "Khaoniyw Mamluing", "description": { "fr": "Riz gluant à la mangue et au lait de coco", "en": "Sticky rice with mango and coconut milk" }, "price": 12, "tags": ["popular"] },
+        { "id": 81, "name": "Kiwy Bwchchi", "description": { "fr": "Banane au lait de coco", "en": "Banana with coconut milk" }, "price": 10, "tags": [] },
+        { "id": 82, "name": "Naphung Kiwy Chub Paeng Thxd", "description": { "fr": "Beignets de banane au miel", "en": "Banana fritters with honey" }, "price": 9, "tags": [] },
+        { "id": 83, "name": "Sabparod Tod Namphung", "description": { "fr": "Beignets d'ananas au miel", "en": "Pineapple fritters with honey" }, "price": 8, "tags": [] },
+        { "id": 84, "name": "Khe Rm Brule Kab Kathi", "description": { "fr": "Crème brûlée au lait de coco", "en": "Coconut milk crème brûlée" }, "price": 7, "tags": [] },
+        { "id": 85, "name": "Phea Krim Mamluing", "description": { "fr": "Crème brûlée à la mangue", "en": "Mango crème brûlée" }, "price": 8, "tags": [] }
+      ]
+    },
+    {
+      "id": "glaces",
+      "name": { "fr": "Glaces", "en": "Ice Cream" },
+      "icon": "🍦",
+      "items": [
+        { "id": 86, "name": "Ice Cream", "description": { "fr": "Vanille, chocolat, mangue, café, framboise, citron, fraise", "en": "Vanilla, chocolate, mango, coffee, raspberry, lemon, strawberry" }, "price": 3.50, "priceUnit": { "fr": "la boule", "en": "per scoop" }, "tags": [] }
+      ]
+    }
+  ],
+  "config": {
+    "currency": "CHF",
+    "halfPortionLabel": { "fr": "1/2 portion", "en": "Half portion" }
+  }
+}

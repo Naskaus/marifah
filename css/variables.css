@@ -1,0 +1,190 @@
+/* =============================================
+   MARIFAH - CSS Variables & Design Tokens
+   Thai Restaurant Meyrin, Geneva
+   ============================================= */
+
+:root {
+  /* ===========================================
+     COLOR PALETTE - Inspired by Thai cuisine
+     =========================================== */
+
+  /* Greens - From lightest to darkest (Lemongrass & Coriander) */
+  --green-50: #f0fdf4;    /* Almost white-green, backgrounds */
+  --green-100: #dcfce7;   /* Very light, subtle accents */
+  --green-200: #bbf7d0;   /* Light, hover states */
+  --green-300: #86efac;   /* Soft accent */
+  --green-400: #4ade80;   /* Medium accent */
+  --green-500: #22c55e;   /* Primary green (logo color) */
+  --green-600: #16a34a;   /* Dark accent */
+  --green-700: #15803d;   /* Very dark */
+  --green-800: #166534;   /* Text on light bg */
+  --green-900: #14532d;   /* Darkest green */
+
+  /* Neutrals */
+  --white: #ffffff;
+  --cream: #fefdf8;       /* Main background - warm white */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Accent Colors (from Thai food) */
+  --orange-carrot: #fb923c;   /* Carrot flower decorations */
+  --orange-light: #fed7aa;
+  --lime: #84cc16;            /* Fresh lime */
+  --chili-red: #ef4444;       /* Spicy indicator */
+  --gold: #fbbf24;            /* Premium accent */
+
+  /* ===========================================
+     SEMANTIC COLORS
+     =========================================== */
+  --color-primary: var(--green-500);
+  --color-primary-light: var(--green-400);
+  --color-primary-dark: var(--green-600);
+
+  --color-bg: var(--cream);
+  --color-bg-alt: var(--green-50);
+  --color-surface: var(--white);
+
+  --color-text: var(--gray-800);
+  --color-text-light: var(--gray-600);
+  --color-text-muted: var(--gray-400);
+
+  --color-border: var(--gray-200);
+  --color-border-light: var(--gray-100);
+
+  /* ===========================================
+     TYPOGRAPHY - Modern & Refined
+     =========================================== */
+  --font-primary: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-thai: 'Sarabun', var(--font-primary);
+  --font-accent: 'Space Grotesk', var(--font-primary);
+
+  /* Font Sizes - Fluid typography */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.6vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+  --text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.5rem);
+  --text-4xl: clamp(2.25rem, 1.75rem + 2.5vw, 3.5rem);
+  --text-5xl: clamp(3rem, 2rem + 5vw, 5rem);
+
+  /* Font Weights - Refined & Light */
+  --font-thin: 200;
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* ===========================================
+     SPACING
+     =========================================== */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+  --space-32: 8rem;     /* 128px */
+
+  /* ===========================================
+     LAYOUT
+     =========================================== */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+
+  --header-height: 80px;
+  --header-height-scrolled: 64px;
+
+  /* ===========================================
+     BORDERS & RADIUS
+     =========================================== */
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1rem;      /* 16px */
+  --radius-2xl: 1.5rem;   /* 24px */
+  --radius-full: 9999px;
+
+  --border-width: 1px;
+  --border-width-2: 2px;
+
+  /* ===========================================
+     SHADOWS
+     =========================================== */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* Colored shadows */
+  --shadow-green: 0 10px 40px -10px rgba(34, 197, 94, 0.3);
+  --shadow-green-lg: 0 20px 60px -15px rgba(34, 197, 94, 0.4);
+
+  /* ===========================================
+     TRANSITIONS
+     =========================================== */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+  --transition-slower: 700ms ease;
+
+  /* Cubic bezier curves */
+  --ease-in-out-cubic: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ===========================================
+     Z-INDEX SCALE
+     =========================================== */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+}
+
+/* Dark mode (for future) */
+@media (prefers-color-scheme: dark) {
+  :root.auto-theme {
+    /* Could add dark mode variables here */
+  }
+}
